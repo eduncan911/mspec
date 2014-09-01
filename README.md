@@ -2,7 +2,7 @@
 
 ## BDD Feature Specifications testing for Go(Lang)
 
-[Godocs](http://godoc.org/github.com/eduncan911/gomspec)
+Source Documentation available at [![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec)
 
 `GoMspec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
 

@@ -1,15 +1,16 @@
-/* Package gomspec is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow, such as:
+/*
+Package gomspec is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow, such as:
 
-	With Feature X
-    	Given a context
-    	When an event occurs
-    	Then it should do something
+  With Feature X
+    Given a context
+    When an event occurs
+    Then it should do something
 
 Currently it has an included `Expectation` struct that mimics basic assertion behaviors.  Future plans may allow for custom assertion packages (like testify).
 
 Referencing / Importing
 
-	import "github.com/eduncan911/gomspec"
+  import "github.com/eduncan911/gomspec"
 
 Building
 
@@ -18,14 +19,14 @@ favorite projects for test.  If you wish to build for sanity checks (the
 Go compiler will only check that a package builds if it does not have a
 main() func), build it like any other project:
 
-	go build
+  go build
 
 Testing
 
 There is nothing like using a testing package to test itself.  There is
 some nice rich information avaliable.
 
-	go test
+  go test
 
 So, Why another BDD Framework?
 
