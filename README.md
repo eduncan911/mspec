@@ -166,22 +166,24 @@ That last goal above is key.  I tend to design my C# code using Machine.Specific
 Therefore, you are free to code specs with just a little syntax noise:
 
 ```go
+// defining specs in Go, without imeplementing or stubbing code
 it("should do this", NA())
 it("should do that", NA())
 it("should not be red", NA())
 it("should not be from the year 8,000 BC", NA())
 ```
 
-I can live with that.  I think it is on par with Machine.Specifications not implemented details:
+I can live with that.  I think it is on par with Machine.Specifications' `Not Implemented` details:
 
 ```c#
+// this is how you do it in C# with MSpec
 It should_do_this;
 It should_do_that;
 it should_not_be_red;
 it should_not_be_from_the_year_8000_BC;
 ```
 
-Those underscores always bugged me.  So it's a trade off to have free-form quoted text verses defining a delegate.
+Those underscores always bugged me.  So it's a trade off to have free-form quoted text verses defining a delegate with underscores that I always fat-fingering.
 
 # IMCOMPLETE DOC: MORE TO COME
 
