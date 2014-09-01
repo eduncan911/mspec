@@ -81,12 +81,15 @@ You run the tests using Go's built-in testing framework.
 
 `$ go test`
 
-Output:
+Outputs:
+
 ![Go BDD Test Output](http://i.imgur.com/MRJvVTc.png)
 
 The output specifies the feature and then the scenario you are testing.  There are multiple output settings that can be configured.
 
 ## Errors are well defined
+
+Let's add a 6th new spec that will blow up.
 
 ```go
 package main
@@ -154,11 +157,11 @@ While keeping backwards compatibility with his existing Zen framework, I defined
 
 * Had to stay simple with Give/When/Then definitions.  No complex coding.
 * Keep the low syntax noise from the existing Zen package.
-* I had to be able to be free to code specs without implementation details.
+* I had to be able to code specs without implementation details.
 
 ### No Implementation Details needed
 
-That last goal above is key.  I tend to design my code first BDD style by writing entire stories and grand specs.  In C# land, it's not unheard of me hitting 50 to 100 specs across a single feature and a few different contexts in an hour or two.  So with this framework, i came up with a simple method name, `NA()` to keep the syntax noise down.  
+That last goal above is key.  I tend to design my C# code using Machine.Specifications in true BDD-style by writing entire stories and grand specs.  In C# land, it's not unheard of me hitting 50 to 100 specs across a single feature and a few different contexts in an hour or two, before writing any code.  So with this framework, I came up with a simple method name, `NA()`, to keep the syntax noise down.  
 
 Therefore, you are free to code specs with just a little syntax noise:
 
@@ -171,7 +174,7 @@ it("should not be from the year 8,000 BC", NA())
 
 I can live with that.  I think it is on par with Machine.Specifications not implemented details:
 
-```c# Machine.Specifications defining specs without implementations
+```c#
 It should_do_this;
 It should_do_that;
 it should_not_be_red;
