@@ -25,8 +25,8 @@ func (spec *specification) run() {
 // Given defines the Feature's specific context to be spec'd out.
 func Given(t *testing.T, context string, scenerioWrapper func(When)) {
 
-	pc, _, _, _ := runtime.Caller(1)
 	featureDesc := func() string {
+		pc, _, _, _ := runtime.Caller(6)
 		m := fmt.Sprintf("%s", runtime.FuncForPC(pc).Name())
 		i := strings.LastIndex(m, ".")
 		m = m[i+1 : len(m)]
@@ -47,7 +47,6 @@ func Given(t *testing.T, context string, scenerioWrapper func(When)) {
 			}
 			spec.run()
 		})
-		fmt.Println()
 	})
 
 	// reset to default
