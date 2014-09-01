@@ -59,10 +59,6 @@ func Test_Bdd_Specifications(t *testing.T) {
 
 			it("should not have this implemented", NA())
 
-			it("should generate a hell of an error", func(expect Expect) {
-				expect(true).ToEqual(false)
-			})
-
 			it("should also perform another evaluation", func(expect Expect) {
 				expect("hellow").ToNotEqual("world")
 			})

@@ -6,7 +6,7 @@ import (
 
 var mspec *Mspec
 
-var (
+const (
 	// http://wiki.bash-hackers.org/scripting/terminalcodes
 
 	reset            = "\033[0m"

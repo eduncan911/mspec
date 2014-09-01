@@ -25,9 +25,6 @@ func (spec *specification) run() {
 // Given defines the Feature's specific context to be spec'd out.
 func Given(t *testing.T, context string, scenerioWrapper func(When)) {
 
-	// reset to default
-	mspec.resetLasts()
-
 	pc, _, _, _ := runtime.Caller(1)
 	featureDesc := func() string {
 		m := fmt.Sprintf("%s", runtime.FuncForPC(pc).Name())
@@ -52,6 +49,9 @@ func Given(t *testing.T, context string, scenerioWrapper func(When)) {
 		})
 		fmt.Println()
 	})
+
+	// reset to default
+	mspec.resetLasts()
 }
 
 // When defines the action or event when Given a specific context.
