@@ -78,9 +78,9 @@ Why another BDD Framework?
 
 When evaluating several BDD frameworks, [Pranavraja's Zen](https://github.com/pranavraja/zen)
 package for Go came close; but, it was lacking the more "story" overview.
- There is something to be said for simple testing in Go (and simple coding);
- therefore, if you are the type to keep it simple, then you may want to use
- his framework as it is just the context and specs.
+There is something to be said for simple testing in Go (and simple coding);
+therefore, if you are the type to keep it simple, then you may want to use
+his framework as it is just the context and specs.
 
 I forked his code and submitted a few bug tweaks.  But along the way, I
 started to have grand visions of my soul mate [Machine.Specifications](https://github.com/machine/machine.specifications)
