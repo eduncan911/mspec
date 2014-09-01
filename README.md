@@ -87,6 +87,8 @@ Outputs:
 
 The output specifies the feature and then the scenario you are testing.  There are multiple output settings that can be configured.
 
+And don't sweat the colors there: they are completely configurable through the global `mspec` configuration.  I need to expose a bit more internals first (and other higher priorities).
+
 ## Errors are well defined
 
 Let's add a 6th new spec that will blow up.
