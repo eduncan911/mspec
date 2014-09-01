@@ -63,6 +63,17 @@ type Mspec struct {
 	AnsiOfCode               string
 	AnsiOfCodeError          string
 	AnsiOfExpectedError      string
+
+	lastFeature string
+	lastContext string
+	lastWhen    string
+	lastTitle   string
+}
+
+func (m *Mspec) resetLasts() {
+	m.lastContext = ""
+	m.lastWhen = ""
+	m.lastTitle = ""
 }
 
 func init() {

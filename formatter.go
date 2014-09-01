@@ -26,57 +26,52 @@ type failingLine struct {
 	prev     string
 }
 
-var lastFeature string
-var lastContext string
-var lastWhen string
-var lastTitle string
-
 func (spec *specification) PrintFeature() {
-	if lastFeature == spec.Feature {
+	if mspec.lastFeature == spec.Feature {
 		return
 	}
 	fmt.Printf("%s%s%s\n", mspec.AnsiOfFeature, spec.Feature, reset)
-	lastFeature = spec.Feature
+	mspec.lastFeature = spec.Feature
 }
 
 func (spec *specification) PrintContext() {
-	if lastContext == spec.Context {
+	if mspec.lastContext == spec.Context {
 		return
 	}
 	fmt.Printf("%s  Given %s%s\n", mspec.AnsiOfGiven, spec.Context, reset)
-	lastContext = spec.Context
+	mspec.lastContext = spec.Context
 }
 
 func (spec *specification) PrintWhen() {
-	if lastWhen == spec.When {
+	if mspec.lastWhen == spec.When {
 		return
 	}
 	fmt.Printf("\n%s    When %s%s\n", mspec.AnsiOfWhen, spec.When, reset)
-	lastWhen = spec.When
+	mspec.lastWhen = spec.When
 }
 
 func (spec *specification) PrintTitle() {
-	if lastTitle == spec.Title {
+	if mspec.lastTitle == spec.Title {
 		return
 	}
 	fmt.Printf("%s    » It %s %s\n", mspec.AnsiOfThen, spec.Title, reset)
-	lastTitle = spec.Title
+	mspec.lastTitle = spec.Title
 }
 
 func (spec *specification) PrintTitleWithError() {
-	if lastTitle == spec.Title {
+	if mspec.lastTitle == spec.Title {
 		return
 	}
 	fmt.Printf("%s    » It %s %s\n", mspec.AnsiOfThenWithError, spec.Title, reset)
-	lastTitle = spec.Title
+	mspec.lastTitle = spec.Title
 }
 
 func (spec *specification) PrintTitleNotImplemented() {
-	if lastTitle == spec.Title {
+	if mspec.lastTitle == spec.Title {
 		return
 	}
 	fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", mspec.AnsiOfThenNotImplemented, spec.Title, reset)
-	lastTitle = spec.Title
+	mspec.lastTitle = spec.Title
 }
 
 func (spec *specification) PrintError(message string) {
