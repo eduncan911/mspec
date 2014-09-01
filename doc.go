@@ -8,11 +8,56 @@ Package gomspec is a testing package for the Go framework that extends Go's buil
 
 Currently it has an included `Expectation` struct that mimics basic assertion behaviors.  Future plans may allow for custom assertion packages (like testify).
 
-Referencing / Importing
+Go get it
+
+  go get github.com/eduncan911/gomspec
+
+Import it
 
   import "github.com/eduncan911/gomspec"
 
-Building
+Write some Specs
+
+	// main_test.go
+	package main
+
+	import (
+		. "github.com/eduncan911/gomspec"
+		"testing"
+	)
+
+	func Test_A_Feature(t *testing.T) {
+
+		Given(t, "a scenario", func(when When) {
+
+			when("something happens", func(it It) {
+
+				it("should do something", func(expect Expect) {
+					expect(true).ToEqual(true)
+				})
+			})
+		})
+	}
+
+Go Test It
+
+  go test
+
+Which outputs the following:
+
+  A Feature
+
+    Given a scenario
+
+      When something happens
+      » It should do something
+
+  PASS
+  ok  	github.com/eduncan911	0.007s
+
+Nice eh?
+
+Source Code
 
 There is no executable.  Instead, this is a package to include in your
 favorite projects for test.  If you wish to build for sanity checks (the
@@ -28,7 +73,8 @@ some nice rich information avaliable.
 
   go test
 
-So, Why another BDD Framework?
+
+Why another BDD Framework?
 
 When evaluating several BDD frameworks, [Pranavraja's Zen](https://github.com/pranavraja/zen)
 package for Go came close; but, it was lacking the more "story" overview.
@@ -47,9 +93,9 @@ by Aaron's MSpec project, I kept the name going here: `GoMspec`.
 While keeping backwards compatibility with his existing Zen framework,
 I defined several goals for this package:
 
-* Had to stay simple with Give/When/Then definitions.  No complex coding.
-* Keep the low syntax noise from the existing Zen package.
-* I had to be able to code specs without implementation details.
+  * Had to stay simple with Give/When/Then definitions.  No complex coding.
+  * Keep the low syntax noise from the existing Zen package.
+  * I had to be able to code specs without implementation details.
 
 No Implementation Details needed
 
