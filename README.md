@@ -151,7 +151,7 @@ Outputs:
 
 When evaluating several BDD frameworks, [Pranavraja's Zen](https://github.com/pranavraja/zen) package for Go came close; but, it was lacking the more "story" overview.  There is something to be said for simple testing in Go (and simple coding); therefore, if you are the type to keep it simple, then you may want to use his framework as it is just the context and specs.
 
-I forked his code and submitted a few bug tweaks.  But along the way, I started to have grand visions of my soul mate [Machine.Specifications](https://github.com/machine/machine.specifications) for BDD testing.  The ease of defining complete stories right down to the scenarios without having to implement them intrigued me in Go.  Could I bring those practices to Go, using a bare-bones framework?  Ok, done.
+I forked his code and submitted a few bug tweaks.  But along the way, I started to have grand visions of my soul mate [Machine.Specifications](https://github.com/machine/machine.specifications) (aka MSpec for short) for BDD testing.  The ease of defining complete stories right down to the scenarios without having to implement them intrigued me in Go.  Could I bring those practices to Go, using a bare-bones framework?  Ok, done.  And since it was so heavily inspired by Aaron's MSpec project, I kept the name going here: `GoMspec`.
 
 While keeping backwards compatibility with his existing Zen framework, I defined several goals for this package:
 
