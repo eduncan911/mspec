@@ -75,7 +75,6 @@ func (spec *specification) PrintTitleNotImplemented() {
 }
 
 func (spec *specification) PrintError(message string) {
-	spec.PrintTitle()
 	failingLine, err := getFailingLine()
 
 	if err != nil {
