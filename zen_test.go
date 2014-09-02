@@ -14,12 +14,6 @@ func Test_Zen_compatibility_with_ExampleDesc(t *testing.T) {
 		it("should have an integer equal to itself", func(expect Expect) {
 			expect(1).ToEqual(1)
 		})
-		it("should not have any integer equal to nil", func(expect Expect) {
-			expect(1).ToNotEqual(nil)
-		})
-		it("should have intergers exist", func(expect Expect) {
-			expect(1).ToExist() // Same as above
-		})
 	})
 }
 

@@ -2,6 +2,7 @@ package gomspec
 
 import (
 	"fmt"
+	"reflect"
 )
 
 // Expect is a light assertion pattern for testing currently embedded
@@ -9,19 +10,17 @@ import (
 // to allow registering custom matchers (e.g. testify's assert package).
 type Expect func(val interface{}) *expectation
 
-type matcher func(a, b interface{}) bool
-
 type expectation struct {
-	Output formatter
 	Value  interface{}
+	Output formatter
 }
 
 // To tests a custom matching interface to the value.
-func (e *expectation) To(desc string, match matcher, value interface{}) {
+func (e *expectation) To(desc string, value interface{}, matcher func(a, b interface{}) bool) {
 	e.Output.PrintFeature()
 	e.Output.PrintContext()
 	e.Output.PrintWhen()
-	if !match(e.Value, value) {
+	if !matcher(e.Value, value) {
 		e.Output.PrintTitleWithError()
 		e.Output.PrintError(fmt.Sprintf("Expected `%v` to %s `%v`", e.Value, desc, value))
 	} else {
@@ -33,10 +32,10 @@ func (e *expectation) To(desc string, match matcher, value interface{}) {
 func (e *expectation) ToEqual(b interface{}) {
 	e.To(
 		"equal",
+		b,
 		func(a, b interface{}) bool {
 			return a == b
 		},
-		b,
 	)
 }
 
@@ -44,32 +43,38 @@ func (e *expectation) ToEqual(b interface{}) {
 func (e *expectation) ToNotEqual(b interface{}) {
 	e.To(
 		"not equal",
+		b,
 		func(a, b interface{}) bool {
 			return a != b
 		},
-		b,
 	)
 }
 
-// ToExist tests that expectation is not equal to nil.
-func (e *expectation) ToExist() {
+// ToNotBeNil tests that expectation is not equal to nil.
+func (e *expectation) ToNotBeNil() {
 	e.To(
 		"exist",
-		func(a, b interface{}) bool {
-			return a != nil
-		},
 		nil,
+		func(a, b interface{}) bool {
+			// TODO either inspect the TypeOf a for types that
+			// support IsNil(); or, capture any panics that occur
+			// and format the error nicely.
+			return !reflect.ValueOf(a).IsNil()
+		},
 	)
 }
 
-// ToNotExist tests that the expectation is equal to nil.
-func (e *expectation) ToNotExist() {
+// ToBeNil tests that the expectation is equal to nil.
+func (e *expectation) ToBeNil() {
 	e.To(
 		"not exist",
-		func(a, b interface{}) bool {
-			return a == nil
-		},
 		nil,
+		func(a, b interface{}) bool {
+			// TODO either inspect the TypeOf a for types that
+			// support IsNil(); or, capture any panics that occur
+			// and format the error nicely.
+			return reflect.ValueOf(a).IsNil()
+		},
 	)
 }
 

@@ -18,7 +18,7 @@ type specification struct {
 
 func (spec *specification) run() {
 	spec.Fn(func(val interface{}) *expectation {
-		return &expectation{spec, val}
+		return &expectation{val, spec}
 	})
 }
 
