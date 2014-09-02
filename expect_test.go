@@ -43,7 +43,7 @@ func (out *output) PrintError(err string) {
 // Prints title, even when test passes
 func TestMatcherPrintsTitle(t *testing.T) {
 	out := new(output)
-	e := &expectation{1, out}
+	e := &Expectation{1, out}
 	e.ToEqual(1)
 	if titlePrinted := out.titlePrinted; !titlePrinted {
 		t.Errorf("should have printed title, but didn't")
@@ -56,7 +56,7 @@ func Test_Custom_Matchers(t *testing.T) {
 
 		// Target: an instance of &expectation
 		out := new(output)
-		e := &expectation{4, out}
+		e := &Expectation{4, out}
 
 		// a custom matcher
 		differsByOne := func(a, b interface{}) bool {
@@ -91,7 +91,7 @@ func Test_Custom_Matchers(t *testing.T) {
 
 		// Target: an instance of &expectation
 		out := new(output)
-		e := &expectation{9, out}
+		e := &Expectation{9, out}
 
 		// a custom matcher
 		divisibleBy := func(a, b interface{}) bool {
