@@ -33,7 +33,7 @@ func Test_Given_this_and_this_and_this(t *testing.T) {
 			d.Wash()
 
 			it("should have the paint come off", func(expect Expect) {
-				expect(d.paint).ToNotExist()
+				expect(d.paint).ToBeNil()
 			})
 
 			it("should be a normal color", func(expect Expect) {
@@ -49,15 +49,15 @@ func Test_Given_this_and_this_and_this(t *testing.T) {
 
 	/*	Outputs:
 
-	Feature: Given this and this and this
+		Feature: Given this and this and this
 
-	  Given a dog that has been painted red
-	  and the paint is washable
-	  and no one has washed the dog yet
+		  Given a dog that has been painted red
+		  and the paint is washable
+		  and no one has washed the dog yet
 
-	    When the dog is washed
-	    » It should have the paint come off
-	    » It should be a normal color
-	    » It should smell like a clean dog
+		    When the dog is washed
+		    » It should have the paint come off
+		    » It should be a normal color
+		    » It should smell like a clean dog
 	*/
 }

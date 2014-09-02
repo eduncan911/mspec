@@ -40,8 +40,8 @@ func Test_Multiple_Givens(t *testing.T) {
 				iswashable: false,
 			})
 
-			it("should should have paint", func(expect Expect) {
-				expect(d.paint).ToExist()
+			it("should have paint on it", func(expect Expect) {
+				expect(d.paint).ToNotBeNil()
 			})
 
 			it("should be the color green", func(expect Expect) {
@@ -67,7 +67,7 @@ func Test_Multiple_Givens(t *testing.T) {
 			d.Wash()
 
 			it("should have the paint come off", func(expect Expect) {
-				expect(d.paint).ToNotExist()
+				expect(d.paint).ToBeNil()
 			})
 
 			it("should be a normal color", func(expect Expect) {
