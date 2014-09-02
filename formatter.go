@@ -30,7 +30,7 @@ func (spec *specification) PrintFeature() {
 	if mspec.lastFeature == spec.Feature {
 		return
 	}
-	fmt.Printf("%s%s%s\n", mspec.AnsiOfFeature, spec.Feature, reset)
+	fmt.Printf("\n%sFeature: %s%s\n", mspec.AnsiOfFeature, spec.Feature, reset)
 	mspec.lastFeature = spec.Feature
 }
 
@@ -38,7 +38,7 @@ func (spec *specification) PrintContext() {
 	if mspec.lastContext == spec.Context {
 		return
 	}
-	fmt.Printf("%s  Given %s%s\n", mspec.AnsiOfGiven, spec.Context, reset)
+	fmt.Printf("\n%s  Given %s%s\n", mspec.AnsiOfGiven, padLf(spec.Context, 2), reset)
 	mspec.lastContext = spec.Context
 }
 
@@ -51,25 +51,25 @@ func (spec *specification) PrintWhen() {
 }
 
 func (spec *specification) PrintTitle() {
-	if mspec.lastTitle == spec.Title {
+	/*if mspec.lastTitle == spec.Title {
 		return
-	}
+	}*/
 	fmt.Printf("%s    » It %s %s\n", mspec.AnsiOfThen, spec.Title, reset)
 	mspec.lastTitle = spec.Title
 }
 
 func (spec *specification) PrintTitleWithError() {
-	if mspec.lastTitle == spec.Title {
+	/*if mspec.lastTitle == spec.Title {
 		return
-	}
+	}*/
 	fmt.Printf("%s    » It %s %s\n", mspec.AnsiOfThenWithError, spec.Title, reset)
 	mspec.lastTitle = spec.Title
 }
 
 func (spec *specification) PrintTitleNotImplemented() {
-	if mspec.lastTitle == spec.Title {
+	/*if mspec.lastTitle == spec.Title {
 		return
-	}
+	}*/
 	fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", mspec.AnsiOfThenNotImplemented, spec.Title, reset)
 	mspec.lastTitle = spec.Title
 }
@@ -124,4 +124,20 @@ func getFailingLine() (failingLine, error) {
 
 func softTabs(text string) string {
 	return strings.Replace(text, "\t", "  ", -1)
+}
+
+func padLf(strToPad string, padding int) string {
+	pad := func() string {
+		s := "\n"
+		for i := 0; i < padding; i++ {
+			s = strings.Join([]string{s, " "}, "")
+		}
+		return s
+	}
+	return strings.Replace(
+		strToPad,
+		"\n",
+		pad(),
+		-1,
+	)
 }

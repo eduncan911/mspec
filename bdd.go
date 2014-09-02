@@ -25,21 +25,11 @@ func (spec *specification) run() {
 // Given defines the Feature's specific context to be spec'd out.
 func Given(t *testing.T, context string, scenerioWrapper func(When)) {
 
-	featureDesc := func() string {
-		pc, _, _, _ := runtime.Caller(6)
-		m := fmt.Sprintf("%s", runtime.FuncForPC(pc).Name())
-		i := strings.LastIndex(m, ".")
-		m = m[i+1 : len(m)]
-		m = strings.Replace(m, "Test_", "", 1)
-		m = strings.Replace(m, "Test", "", 1)
-		return strings.Replace(m, "_", " ", -1)
-	}
-
 	scenerioWrapper(func(when string, testWrapper func(It)) {
 		testWrapper(func(it string, fn func(Expect)) {
 			spec := &specification{
 				t,
-				featureDesc(),
+				featureDesc(6),
 				context,
 				when,
 				it,
@@ -85,7 +75,7 @@ func Desc(t *testing.T, desc string, wrapper func(It)) {
 	wrapper(func(it string, fn func(Expect)) {
 		spec := &specification{
 			t,
-			"<not set>",
+			featureDesc(4),
 			"",
 			desc,
 			it,
@@ -93,4 +83,14 @@ func Desc(t *testing.T, desc string, wrapper func(It)) {
 		}
 		spec.run()
 	})
+}
+
+var featureDesc = func(callerDepth int) string {
+	pc, _, _, _ := runtime.Caller(callerDepth)
+	m := fmt.Sprintf("%s", runtime.FuncForPC(pc).Name())
+	i := strings.LastIndex(m, ".")
+	m = m[i+1 : len(m)]
+	m = strings.Replace(m, "Test_", "", 1)
+	m = strings.Replace(m, "Test", "", 1)
+	return strings.Replace(m, "_", " ", -1)
 }
