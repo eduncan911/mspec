@@ -1,6 +1,6 @@
 # GoMspec
 
-## BDD Feature Specifications testing for Go(Lang)
+A BDD Feature Specifications testing package for Go(Lang)
 
 Source Documentation available at [![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec)
 
@@ -26,46 +26,39 @@ There are no external dependencies and is built against Go's internal packages: 
 Pay attention to the function name as it is used as part of the output.
 
 ```go
-package main
+// dogs_test.go
+//
+package dogs
 
 import (
     . "github.com/eduncan911/gomspec"
     "testing"
 )
 
-func TestNewClient(t *testing.T) {
+func Test_Washing_Dogs(t *testing.T) {
 
-    Given(t, "a valid ProviderConfig", func(when When) {
+    Given(t, "a dog that has been painted red\nand the paint is washable\nand no one has washed the dog yet", func(when When) {
 
-        pc := &ProviderConfig{
-            Name:          "Acme Corp",
-            ShellScript:   "acmecorp-import.sh",
-            RunValidation: true,
-            RunMatching:   true,
-            RunUpserts:    true,
-        }
+        d := BirthDog()
+        d.Paint(&paint{
+            color:      "red",
+            iswashable: true,
+        })
 
-        when("calling NewClient", func(it It) {
+        when("the dog is washed", func(it It) {
 
-            c, err := NewClient(*pc)
+            d.Wash()
 
-            it("should not return an error.", func(expect Expect) {
-                expect(err).ToNotExist()
+            it("should have the paint come off", func(expect Expect) {
+                expect(d.paint).ToNotExist()
             })
 
-            it("should return a valid client object.", func(expect Expect) {
-                expect(c).ToExist()
+            it("should be a normal color", func(expect Expect) {
+                expect(d.color).ToEqual(normalColor)
             })
 
-            it("should have cancelToken as false.", func(expect Expect) {
-                expect(c.cancelToken).ToEqual(false)
-            })
-
-             // an example of more work to do
-            it("should ask master for more work", NA())
-
-            it("should have a valid pointer to a time.Ticker.", func(expect Expect) {
-                expect(c.stateUpdateTicker).ToExist()
+            it("should smell like a clean dog", func(expect Expect) {
+                expect(d.washed).ToEqual(true)
             })
         })
     })
@@ -82,15 +75,24 @@ You run the tests using Go's built-in testing framework.
 
 Outputs:
 
-![Go BDD Test Output](http://i.imgur.com/MRJvVTc.png)
+```
+Feature: Washing Dogs
+
+  Given a dog that has been painted red
+  and the paint is washable
+  and no one has washed the dog yet
+
+    When the dog is washed
+    » It should have the paint come off
+    » It should be a normal color
+    » It should smell like a clean dog
+```
 
 The output specifies the feature and then the scenario you are testing.  There are multiple output settings that can be configured.
 
-And don't sweat the colors there: they are completely configurable through the global `mspec` configuration.  I need to expose a bit more internals first (and other higher priorities).
-
 ## Errors are well defined
 
-Let's add a 6th new spec that will blow up.
+Let's add a feature that has a spec that will blow up.
 
 ```go
 package main
@@ -100,7 +102,7 @@ import (
     "testing"
 )
 
-func TestNewClient(t *testing.T) {
+func Test_Creating_a_Client(t *testing.T) {
 
     Given(t, "a valid ProviderConfig", func(when When) {
 
@@ -112,7 +114,7 @@ func TestNewClient(t *testing.T) {
             RunUpserts:    true,
         }
 
-        when("calling NewClient", func(it It) {
+        when("calling NewClient() constructor", func(it It) {
 
             c, err := NewClient(*pc)
 
@@ -122,16 +124,6 @@ func TestNewClient(t *testing.T) {
 
             it("should return a valid client object.", func(expect Expect) {
                 expect(c).ToExist()
-            })
-
-            it("should have cancelToken as false.", func(expect Expect) {
-                expect(c.cancelToken).ToEqual(false)
-            })
-
-            it("should ask master for more work", NA())
-
-            it("should have a valid pointer to a time.Ticker.", func(expect Expect) {
-                expect(c.stateUpdateTicker).ToExist()
             })
 
             // this will blow up!
@@ -146,7 +138,16 @@ func TestNewClient(t *testing.T) {
 
 Outputs:
 
-![Go BDD Tests Output](http://i.imgur.com/qshhxYp.png)
+(insert error pic with color output)
+
+## Examples
+
+Be sure to check out more examples in the examples/ folder.
+
+```bash
+$ cd examples/
+$ go test
+```
 
 ## Why another BDD Framework?
 
@@ -186,20 +187,14 @@ it should_not_be_from_the_year_8000_BC;
 
 Those underscores always bugged me.  So it's a trade off to have free-form quoted text verses defining a delegate with underscores that I always fat-fingering.
 
-# IMCOMPLETE DOC: MORE TO COME
-
-I just wanted to get this pushed tonight so I could get back to work.  This readme, as well as a blog post, is coming.
-
-Todo
+# Roadmap
 
 * write blog post
-* write docs
+* write wiki
 * more examples as well as custom formatters/expectations
 * `Setup()` examples
-* `func Test_Name_With_Underscores(t *testing)` examples.
 * Total tests passed, errored, skipped
-
-Roadmap
 * HTML output
+* surpressing output (quiet)
 * concurrent channel execution of `it`s
 

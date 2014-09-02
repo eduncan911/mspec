@@ -16,19 +16,32 @@ func Test_Given_this_and_this_and_this(t *testing.T) {
 	// and no one has washed the dog yet
 	// When the dog is washed
 	// It should have the paint come off
+	// It should be a normal color
 	// It should smell like a clean dog
 	//
 
 	Given(t, "a dog that has been painted red\nand the paint is washable\nand no one has washed the dog yet", func(when When) {
 
+		d := BirthDog()
+		d.Paint(&paint{
+			color:      "red",
+			iswashable: true,
+		})
+
 		when("the dog is washed", func(it It) {
 
+			d.Wash()
+
 			it("should have the paint come off", func(expect Expect) {
-				expect(true).ToEqual(true)
+				expect(d.paint).ToNotExist()
+			})
+
+			it("should be a normal color", func(expect Expect) {
+				expect(d.color).ToEqual(normalColor)
 			})
 
 			it("should smell like a clean dog", func(expect Expect) {
-				expect(true).ToEqual(true)
+				expect(d.washed).ToEqual(true)
 			})
 
 		})
@@ -36,14 +49,15 @@ func Test_Given_this_and_this_and_this(t *testing.T) {
 
 	/*	Outputs:
 
-		Feature: Example of Given this And this And this
+	Feature: Given this and this and this
 
-		  Given a dog that has been painted red
-		  and the paint is washable
-		  and no one has washed the dog yet
+	  Given a dog that has been painted red
+	  and the paint is washable
+	  and no one has washed the dog yet
 
-		    When the dog is washed
-		    » It should have the paint come off
-		    » It should smell like a clean dog
+	    When the dog is washed
+	    » It should have the paint come off
+	    » It should be a normal color
+	    » It should smell like a clean dog
 	*/
 }

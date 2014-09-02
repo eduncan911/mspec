@@ -12,58 +12,96 @@ func Test_Multiple_Givens(t *testing.T) {
 	// switching mental contexts by staying in the same func definition.
 	//
 
-	Given(t, "a rabbi, a priest, and a Lutheran minister", func(when When) {
+	Given(t, "no dogs available", func(when When) {
 
-		when("they walk into a bar", func(it It) {
+		when("creating a new dog", func(it It) {
 
-			it("should have the bartender ask, \"Is this some kind of a joke?\"", func(expect Expect) {
-				expect(true).ToEqual(true)
+			d := BirthDog()
+
+			it("should be a normal color", func(expect Expect) {
+				expect(d.color).ToEqual(normalColor)
 			})
 
-			it("should have at least 1 laughing audience member", func(expect Expect) {
-				expect(true).ToEqual(true)
-			})
-		})
-	})
-
-	Given(t, "a Screwdriver walks into a bar", func(when When) {
-
-		when("the bartender says, \"Hey, we have a drink named after you!\"", func(it It) {
-
-			it("should have the Screwdriver saying, \"You have a drink named Murray?\"", func(expect Expect) {
-				expect(true).ToEqual(true)
+			it("should not need washing", func(expect Expect) {
+				expect(d.washed).ToEqual(false)
 			})
 		})
 	})
 
-	Given(t, "a Horse", func(when When) {
+	Given(t, "an unpainted dog", func(when When) {
 
-		when("it walks into a bar", func(it It) {
+		d := BirthDog()
+		colorToPaint := "green"
 
-			it("should have the bartender ask, \"Hey, why the long face?\"", func(expect Expect) {
-				expect(true).ToEqual(true)
+		when("painting the dog a permanent green", func(it It) {
+
+			d.Paint(&paint{
+				color:      colorToPaint,
+				iswashable: false,
+			})
+
+			it("should should have paint", func(expect Expect) {
+				expect(d.paint).ToExist()
+			})
+
+			it("should be the color green", func(expect Expect) {
+				expect(d.color).ToEqual(colorToPaint)
+			})
+
+			it("should not be washed", func(expect Expect) {
+				expect(d.washed).ToEqual(false)
+			})
+		})
+	})
+
+	Given(t, "a painted dog", func(when When) {
+
+		d := BirthDog()
+		d.Paint(&paint{
+			color:      "red",
+			iswashable: true,
+		})
+
+		when("washing the dog", func(it It) {
+
+			d.Wash()
+
+			it("should have the paint come off", func(expect Expect) {
+				expect(d.paint).ToNotExist()
+			})
+
+			it("should be a normal color", func(expect Expect) {
+				expect(d.color).ToEqual(normalColor)
+			})
+
+			it("should smell like a clean dog", func(expect Expect) {
+				expect(d.washed).ToEqual(true)
 			})
 		})
 	})
 
 	/* Outputs:
 
-	   Feature: Example of Multiple Givens
+	Feature: Multiple Givens
 
-	     Given a rabbi, a priest, and a Lutheran minister
+	  Given no dogs available
 
-	       When they walk into a bar
-	       » It should have the bartender ask, "Is this some kind of a joke?"
-	       » It should have at least 1 laughing audience member
+	    When creating a new dog
+	    » It should be a normal color
+	    » It should not need washing
 
-	     Given a Screwdriver walks into a bar
+	  Given an unpainted dog
 
-	       When the bartender says, "Hey, we have a drink named after you!"
-	       » It should have the Screwdriver saying, "You have a drink named Murray?"
+	    When painting the dog a permanent green
+	    » It should should have paint
+	    » It should be the color green
+	    » It should not be washed
 
-	     Given a Horse
+	  Given a painted dog
 
-	       When it walks into a bar
-	       » It should have the bartender ask, "Hey, why the long face?"
+	    When washing the dog
+	    » It should have the paint come off
+	    » It should be a normal color
+	    » It should smell like a clean dog
 	*/
 }
