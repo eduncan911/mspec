@@ -8,15 +8,16 @@ import (
 // Expect is a light assertion pattern for testing currently embedded
 // GoMspec's code.  Future work may be to expose it as an interface
 // to allow registering custom matchers (e.g. testify's assert package).
-type Expect func(val interface{}) *expectation
+type Expect func(val interface{}) *Expectation
 
-type expectation struct {
+// Expectation represents the value being asserted.
+type Expectation struct {
 	Value  interface{}
 	Output formatter
 }
 
 // To tests a custom matching interface to the value.
-func (e *expectation) To(desc string, value interface{}, matcher func(a, b interface{}) bool) {
+func (e *Expectation) To(desc string, value interface{}, matcher func(a, b interface{}) bool) {
 	e.Output.PrintFeature()
 	e.Output.PrintContext()
 	e.Output.PrintWhen()
@@ -28,8 +29,8 @@ func (e *expectation) To(desc string, value interface{}, matcher func(a, b inter
 	}
 }
 
-// ToEqual tests the equality of the expectation to the value of b.
-func (e *expectation) ToEqual(b interface{}) {
+// ToEqual tests the equality of the Expectation to the value of b.
+func (e *Expectation) ToEqual(b interface{}) {
 	e.To(
 		"equal",
 		b,
@@ -39,8 +40,8 @@ func (e *expectation) ToEqual(b interface{}) {
 	)
 }
 
-// ToNotEqual tests the inequality of the expectation to the value of b.
-func (e *expectation) ToNotEqual(b interface{}) {
+// ToNotEqual tests the inequality of the Expectation to the value of b.
+func (e *Expectation) ToNotEqual(b interface{}) {
 	e.To(
 		"not equal",
 		b,
@@ -51,7 +52,7 @@ func (e *expectation) ToNotEqual(b interface{}) {
 }
 
 // ToNotBeNil tests that expectation is not equal to nil.
-func (e *expectation) ToNotBeNil() {
+func (e *Expectation) ToNotBeNil() {
 	e.To(
 		"exist",
 		nil,
@@ -65,7 +66,7 @@ func (e *expectation) ToNotBeNil() {
 }
 
 // ToBeNil tests that the expectation is equal to nil.
-func (e *expectation) ToBeNil() {
+func (e *Expectation) ToBeNil() {
 	e.To(
 		"not exist",
 		nil,
@@ -78,7 +79,7 @@ func (e *expectation) ToBeNil() {
 	)
 }
 
-func (e *expectation) notImplemented() {
+func (e *Expectation) notImplemented() {
 	e.Output.PrintFeature()
 	e.Output.PrintContext()
 	e.Output.PrintWhen()
