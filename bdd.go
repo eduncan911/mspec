@@ -70,21 +70,6 @@ func NA() func(Expect) {
 	return NotImplemented()
 }
 
-// Desc is legacy support for existing Zen users.
-func Desc(t *testing.T, desc string, wrapper func(It)) {
-	wrapper(func(it string, fn func(Expect)) {
-		spec := &specification{
-			t,
-			featureDesc(4),
-			"",
-			desc,
-			it,
-			fn,
-		}
-		spec.run()
-	})
-}
-
 var featureDesc = func(callerDepth int) string {
 	pc, _, _, _ := runtime.Caller(callerDepth)
 	m := fmt.Sprintf("%s", runtime.FuncForPC(pc).Name())
