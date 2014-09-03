@@ -1,4 +1,8 @@
-# GoMSpec
+LEGACY: *This version 0.1 is tagged for the last version with backwards compatibility with [Pranavraja's Zen](https://github.com/pranavraja/zen) package.  Going forward, there are breaking changes that are not.  
+
+You may submit issues and pull requests against this tag version `0.1` and I will continue to support it.  Just note what version it is.*
+
+# GoMSpec 0.1
 
 A BDD Feature Specifications testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios before any code is written.  This leaves you free to think of your project and features as a whole without the distraction of writing code.
 
