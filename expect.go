@@ -152,7 +152,7 @@ func isNil(object interface{}) bool {
 // ToBeEmpty evaluates types for zero values and returns true if completely empty.
 func (e *Expectation) ToBeEmpty() {
 	e.To(
-		"",
+		"be empty",
 		nil,
 		func(a, b interface{}) bool {
 			return isEmpty(a)

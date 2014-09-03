@@ -144,20 +144,15 @@ func Test_Expectations(t *testing.T) {
 			})
 		})
 
-		when("evaluating expect(o2).ToNotExist()", func(it It) {
+		when("evaluating expect(o2)", func(it It) {
 
-			var o2 object
+			var o2 interface{}
 
-			it("should be nil", func(expect Expect) {
-				expect(o2.value).ToNotExist()
+			it("should not exist", func(expect Expect) {
+				expect(o2).ToNotExist()
 			})
-		})
 
-		when("evaluating expect(o2).ToBeEmpty()", func(it It) {
-
-			var o2 object
-
-			it("should be nil", func(expect Expect) {
+			it("should be empty", func(expect Expect) {
 				expect(o2).ToBeEmpty()
 			})
 		})
@@ -168,7 +163,7 @@ func Test_Expectations(t *testing.T) {
 			})
 		})
 
-		when("evaluating expect(o2).ToEqual(o)", func(it It) {
+		when("evaluating expect(o2)", func(it It) {
 
 			var o2 = o
 
@@ -202,9 +197,28 @@ func Test_Expectations(t *testing.T) {
 			value: value,
 		}
 
-		when("evaluating expect(o.ref).ToExist()", func(it It) {
+		when("evalutating expect(o).ToExist()", func(it It) {
 			it("should not be nil", func(expect Expect) {
+				expect(o).ToExist()
+			})
+		})
+
+		when("evaluating expect(o.ref)", func(it It) {
+			it("should exist", func(expect Expect) {
 				expect(o.ref).ToExist()
+			})
+
+			it("should not be empty", func(expect Expect) {
+				expect(o.ref).ToNotBeEmpty()
+			})
+		})
+
+		when("evalutating expect(o2)", func(it It) {
+
+			var o2 *object
+
+			it("should not exist", func(expect Expect) {
+				expect(o2).ToNotExist()
 			})
 		})
 
