@@ -33,7 +33,7 @@ func Test_Given_this_and_this_and_this(t *testing.T) {
 			d.Wash()
 
 			it("should have the paint come off", func(expect Expect) {
-				expect(d.paint).ToBeNil()
+				expect(d.paint).ToNotExist()
 			})
 
 			it("should be a normal color", func(expect Expect) {

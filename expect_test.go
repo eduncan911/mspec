@@ -133,19 +133,39 @@ func Test_Expectations(t *testing.T) {
 	Given(t, "a struct value", func(when When) {
 
 		value := "some text"
-		o := &object{
+		o := object{
 			ref:   &value,
 			value: value,
 		}
 
-		when("evaluating expect(o).ToNotBeNil()", func(it It) {
-			it("should throw an error", NA())
-			it("should say that ToNotBeNil() only works on pointers", NA())
+		when("evaluating expect(o).ToExist()", func(it It) {
+			it("should not be nil", func(expect Expect) {
+				expect(o).ToExist()
+			})
 		})
 
-		when("evaluating expect(o2).ToBeNil()", func(it It) {
-			it("should throw an error", NA())
-			it("should say that ToBeNil() only works on pointers", NA())
+		when("evaluating expect(o2).ToNotExist()", func(it It) {
+
+			var o2 object
+
+			it("should be nil", func(expect Expect) {
+				expect(o2.value).ToNotExist()
+			})
+		})
+
+		when("evaluating expect(o2).ToBeEmpty()", func(it It) {
+
+			var o2 object
+
+			it("should be nil", func(expect Expect) {
+				expect(o2).ToBeEmpty()
+			})
+		})
+
+		when("evaluating expect(o).ToNotBeEmpty()", func(it It) {
+			it("should not be nil", func(expect Expect) {
+				expect(o).ToNotBeEmpty()
+			})
 		})
 
 		when("evaluating expect(o2).ToEqual(o)", func(it It) {
@@ -155,13 +175,17 @@ func Test_Expectations(t *testing.T) {
 			it("should be equal", func(expect Expect) {
 				expect(o2).ToEqual(o)
 			})
+
+			it("should match exactly", func(expect Expect) {
+				expect(o2).ToMatchExactly(o)
+			})
 		})
 
 		when("evaluating expect(o2).ToNotEqual(o)", func(it It) {
 
 			var o2 = &object{
 				ref:   &value,
-				value: value,
+				value: "sometning different",
 			}
 
 			it("should not be equal", func(expect Expect) {
@@ -178,15 +202,15 @@ func Test_Expectations(t *testing.T) {
 			value: value,
 		}
 
-		when("evaluating expect(o.ref).ToNotBeNil()", func(it It) {
+		when("evaluating expect(o.ref).ToExist()", func(it It) {
 			it("should not be nil", func(expect Expect) {
-				expect(o.ref).ToNotBeNil()
+				expect(o.ref).ToExist()
 			})
 		})
 
-		when("evaluating expect(o.ref2).ToBeNil()", func(it It) {
+		when("evaluating expect(o.ref2).ToNotExist()", func(it It) {
 			it("should be nil", func(expect Expect) {
-				expect(o.ref2).ToBeNil()
+				expect(o.ref2).ToNotExist()
 			})
 		})
 
@@ -207,16 +231,6 @@ func Test_Expectations(t *testing.T) {
 
 		i := 5
 
-		when("evaluating expect(i).ToNotBeNil()", func(it It) {
-			it("should throw an error", NA())
-			it("should say that ToNotBeNil() only works on pointers", NA())
-		})
-
-		when("evaluating expect(i).ToBeNil()", func(it It) {
-			it("should throw an error", NA())
-			it("should say that ToBeNil() only works on pointers", NA())
-		})
-
 		when("evaluating expect(5).ToEqual(5)", func(it It) {
 			it("should be equal", func(expect Expect) {
 				expect(i).ToEqual(5)
@@ -235,14 +249,19 @@ func Test_Expectations(t *testing.T) {
 
 		s := "hello"
 
-		when("evaluating expect(s).ToNotBeNil()", func(it It) {
-			it("should throw an error", NA())
-			it("should say that ToNotBeNil() only works on pointers", NA())
+		when("evaluating expect(s).ToNotBeEmpty()", func(it It) {
+			it("should not be empty", func(expect Expect) {
+				expect(s).ToNotBeEmpty()
+			})
 		})
 
-		when("evaluating expect(s).ToBeNil()", func(it It) {
-			it("should throw an error", NA())
-			it("should say that ToBeNil() only works on pointers", NA())
+		when("evaluating expect(s).ToBeEmpty()", func(it It) {
+
+			s2 := ""
+
+			it("should not be empty", func(expect Expect) {
+				expect(s2).ToBeEmpty()
+			})
 		})
 
 		when("evaluating expect(s).ToEqual(s)", func(it It) {
