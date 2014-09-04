@@ -10,7 +10,7 @@ func Test_Mspec_Instances(t *testing.T) {
 
 		f := "feature value"
 
-		mspecTest := &Mspec{
+		mspecTest := &MSpecConfig{
 			lastFeature: f,
 			lastContext: "context value",
 			lastWhen:    "when value",

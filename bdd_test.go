@@ -9,22 +9,22 @@ func Test_Bdd_Specifications(t *testing.T) {
 	Given(t, "a unique scenerio", func(when When) {
 
 		when("an event occurs", func(it It) {
-			it("should evaluate to 1", func(expect Expect) {
-				expect(1).ToEqual(1)
+			it("should evaluate 1s are equal", func(assert Assert) {
+				assert.Equal(1, 2)
 			})
 
-			it("should also evaluate to 3", func(expect Expect) {
-				expect(3).ToEqual(3)
+			it("should also evaluate 3 and 4 are not equal", func(assert Assert) {
+				assert.NotEqual(3, 4)
 			})
 
-			it("should perform another evaluation", func(expect Expect) {
-				expect(4).ToNotEqual(5)
+			it("should perform another evaluation", func(assert Assert) {
+				//expect(4).ToNotEqual(5)
 			})
 
 			it("should not have this implemented", NA())
 
-			it("should also perform another evaluation", func(expect Expect) {
-				expect("hellow").ToNotEqual("world")
+			it("should also perform another evaluation", func(eassert Assert) {
+				//expect("hellow").ToNotEqual("world")
 			})
 		})
 	})
@@ -45,8 +45,8 @@ func Test_Bdd_Specifications(t *testing.T) {
 
 			setup := Setup(before, after)
 
-			it("should increment count to 1", setup(func(expect Expect) {
-				expect(count).ToEqual(1)
+			it("should increment count to 1", setup(func(assert Assert) {
+				//expect(count).ToEqual(1)
 			}))
 
 			if count != 0 {

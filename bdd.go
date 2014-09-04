@@ -7,66 +7,79 @@ import (
 	"testing"
 )
 
-type specification struct {
+// Specification holds the state of the context for a specific specification.
+type Specification struct {
 	T       *testing.T
 	Feature string
-	Context string
+	Given   string
 	When    string
-	Title   string
-	Fn      func(Expect)
+	Spec    string
+	Fn      func(Assert)
 }
 
-func (spec *specification) run() {
-	spec.Fn(func(val interface{}) *Expectation {
-		return &Expectation{val, spec}
-	})
+func (spec *Specification) run() {
+
+	// maybe print everything from here now?
+	spec.PrintFeature()
+	spec.PrintContext()
+	spec.PrintWhen()
+
+	// TODO need a way to test for the assert failing here,
+	// then control which spec result we print.
+	spec.PrintSpec()
+
+	spec.Fn(MSpec.assertFn(spec))
 }
 
 // Given defines the Feature's specific context to be spec'd out.
-func Given(t *testing.T, context string, scenerioWrapper func(When)) {
+func Given(t *testing.T, given string, whenFn func(When)) {
 
-	scenerioWrapper(func(when string, testWrapper func(It)) {
-		testWrapper(func(it string, fn func(Expect)) {
-			spec := &specification{
+	whenFn(func(when string, itFn func(It)) {
+		itFn(func(it string, assertFn func(Assert)) {
+
+			spec := &Specification{
 				t,
 				featureDesc(6),
-				context,
+				given,
 				when,
 				it,
-				fn,
+				assertFn,
 			}
 			spec.run()
+
 		})
 	})
 
 	// reset to default
-	mspec.resetLasts()
+	MSpec.resetLasts()
 }
 
 // When defines the action or event when Given a specific context.
 type When func(when string, fn func(It))
 
 // It defines the specification of when something happens.
-type It func(title string, fn func(Expect))
+type It func(title string, fn func(Assert))
 
 // Setup is used to define before/after (setup/teardown) functions.
-func Setup(before, after func()) func(fn func(Expect)) func(Expect) {
-	return func(fn func(Expect)) func(Expect) {
+func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
+	return func(fn func(Assert)) func(Assert) {
 		before()
-		return func(expect Expect) {
-			fn(expect)
+		return func(assert Assert) {
+			fn(assert)
 			after()
 		}
 	}
 }
 
 // NotImplemented is used to mark a specification that needs coding out.
-func NotImplemented() func(Expect) {
-	return func(expect Expect) { expect(nil).notImplemented() }
+func NotImplemented() func(Assert) {
+	return func(assert Assert) {
+		//expect(nil).notImplemented()
+	}
 }
 
 // NA is shorthand for the NotImplemented() function.
-func NA() func(Expect) {
+func NA() func(Assert) {
 	return NotImplemented()
 }
 

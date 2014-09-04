@@ -2,6 +2,7 @@ package gomspec
 
 import (
 	"fmt"
+	"github.com/eduncan911/gomspec/colors"
 	"io/ioutil"
 	"path"
 	"runtime"
@@ -26,71 +27,62 @@ type failingLine struct {
 	prev     string
 }
 
-func (spec *specification) PrintFeature() {
-	if mspec.lastFeature == spec.Feature {
+func (spec *Specification) PrintFeature() {
+	if MSpec.lastFeature == spec.Feature {
 		return
 	}
-	fmt.Printf("\n%sFeature: %s%s\n", mspec.AnsiOfFeature, spec.Feature, reset)
-	mspec.lastFeature = spec.Feature
+	fmt.Printf("\n%sFeature: %s%s\n", MSpec.AnsiOfFeature, spec.Feature, colors.Reset)
+	MSpec.lastFeature = spec.Feature
 }
 
-func (spec *specification) PrintContext() {
-	if mspec.lastContext == spec.Context {
+func (spec *Specification) PrintContext() {
+	if MSpec.lastGiven == spec.Given {
 		return
 	}
-	fmt.Printf("\n%s  Given %s%s\n", mspec.AnsiOfGiven, padLf(spec.Context, 2), reset)
-	mspec.lastContext = spec.Context
+	fmt.Printf("\n%s  Given %s%s\n", MSpec.AnsiOfGiven, padLf(spec.Given, 2), colors.Reset)
+	MSpec.lastGiven = spec.Given
 }
 
-func (spec *specification) PrintWhen() {
-	if mspec.lastWhen == spec.When {
+func (spec *Specification) PrintWhen() {
+	if MSpec.lastWhen == spec.When {
 		return
 	}
-	fmt.Printf("\n%s    When %s%s\n", mspec.AnsiOfWhen, spec.When, reset)
-	mspec.lastWhen = spec.When
+	fmt.Printf("\n%s    When %s%s\n", MSpec.AnsiOfWhen, spec.When, colors.Reset)
+	MSpec.lastWhen = spec.When
 }
 
-func (spec *specification) PrintTitle() {
-	/*if mspec.lastTitle == spec.Title {
-		return
-	}*/
-	fmt.Printf("%s    » It %s %s\n", mspec.AnsiOfThen, spec.Title, reset)
-	mspec.lastTitle = spec.Title
+func (spec *Specification) PrintSpec() {
+	fmt.Printf("%s    » It %s %s\n", MSpec.AnsiOfThen, spec.Spec, colors.Reset)
+	MSpec.lastSpec = spec.Spec
 }
 
-func (spec *specification) PrintTitleWithError() {
-	/*if mspec.lastTitle == spec.Title {
-		return
-	}*/
-	fmt.Printf("%s    » It %s %s\n", mspec.AnsiOfThenWithError, spec.Title, reset)
-	mspec.lastTitle = spec.Title
+func (spec *Specification) PrintTitleWithError() {
+	fmt.Printf("%s    » It %s %s\n", MSpec.AnsiOfThenWithError, spec.Spec, colors.Reset)
+	MSpec.lastSpec = spec.Spec
 }
 
-func (spec *specification) PrintTitleNotImplemented() {
-	/*if mspec.lastTitle == spec.Title {
-		return
-	}*/
-	fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", mspec.AnsiOfThenNotImplemented, spec.Title, reset)
-	mspec.lastTitle = spec.Title
+func (spec *Specification) PrintTitleNotImplemented() {
+	fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", MSpec.AnsiOfThenNotImplemented, spec.Spec, colors.Reset)
+	MSpec.lastSpec = spec.Spec
 }
 
-func (spec *specification) PrintError(message string) {
+func (spec *Specification) PrintError(message string) {
 	failingLine, err := getFailingLine()
 
 	if err != nil {
 		return
 	}
 
-	fmt.Printf("%s      %s%s\n", mspec.AnsiOfExpectedError, message, reset)
-	fmt.Printf("%s      %s:%d%s\n", mspec.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, reset)
+	fmt.Printf("%s      %s%s\n", MSpec.AnsiOfExpectedError, message, colors.Reset)
+	fmt.Printf("%s      %s:%d%s\n", MSpec.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
 	spec.PrintFailingLine(&failingLine)
 	spec.T.Fail()
 }
 
-func (spec *specification) PrintFailingLine(failingLine *failingLine) {
-	fmt.Printf("%s        %d. %s%s\n", mspec.AnsiOfCode, failingLine.number-1, failingLine.prev, reset)
-	fmt.Printf("%s        %d. %s %s\n", mspec.AnsiOfCodeError, failingLine.number, failingLine.content, reset)
-	fmt.Printf("%s        %d. %s%s\n", mspec.AnsiOfCode, failingLine.number+1, failingLine.next, reset)
+func (spec *Specification) PrintFailingLine(failingLine *failingLine) {
+	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number-1, failingLine.prev, colors.Reset)
+	fmt.Printf("%s        %d. %s %s\n", MSpec.AnsiOfCodeError, failingLine.number, failingLine.content, colors.Reset)
+	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number+1, failingLine.next, colors.Reset)
 	fmt.Println()
 }
 

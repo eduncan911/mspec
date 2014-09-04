@@ -1,0 +1,46 @@
+// Package colors supplies a list a constants for VT100 ANSI color codes that can be rendered to the console.
+package colors
+
+const (
+	Reset            = "\033[0m"
+	Bold             = "\033[1m"
+	Dim              = "\033[2m"
+	Underline        = "\033[4m"
+	UnderlineOff     = "\033[24m"
+	Blink            = "\033[5m"
+	BlinkOff         = "\033[25m"
+	Inverse          = "\033[7m"
+	InverseOff       = "\033[27m"
+	Strikethrough    = "\033[9m"
+	StrikethroughOff = "\033[29m"
+
+	Black        = "\033[0;30m"
+	DarkGray     = "\033[1;30m"
+	Red          = "\033[0;31m"
+	LightRed     = "\033[1;31m"
+	Green        = "\033[0;32m"
+	LightGreen   = "\033[1;32m"
+	Yellow       = "\033[0;33m"
+	LightYellow  = "\033[1;33m"
+	Blue         = "\033[0;34m"
+	LightBlue    = "\033[1;34m"
+	Magenta      = "\033[0;35m"
+	LightMagenta = "\033[1;35m"
+	Cyan         = "\033[0;36m"
+	LightCyan    = "\033[1;36m"
+	Grey         = "\033[0;37m"
+	White        = "\033[1;37m"
+	DefaultColor = "\033[39m"
+
+	BlackBg        = "\033[40m"
+	RegBg          = "\033[41m"
+	GreenBg        = "\033[42m"
+	YellowBg       = "\033[43m"
+	BlueBg         = "\033[44m"
+	MagentaBg      = "\033[45m"
+	CyanBg         = "\033[46m"
+	WhiteBg        = "\033[47m"
+	DefaultBgColor = "\033[49m"
+
+	DarkGrey = "\x1B[90m"
+)
