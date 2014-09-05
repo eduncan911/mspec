@@ -32,7 +32,7 @@ func (spec *Specification) PrintFeature() {
 	if MSpec.lastFeature == spec.Feature {
 		return
 	}
-	fmt.Printf("\n%sFeature: %s%s\n", MSpec.AnsiOfFeature, spec.Feature, colors.Reset)
+	fmt.Printf("\n%sFeature: %s%s\n\n", MSpec.AnsiOfFeature, spec.Feature, colors.Reset)
 	MSpec.lastFeature = spec.Feature
 }
 
@@ -40,7 +40,7 @@ func (spec *Specification) PrintContext() {
 	if MSpec.lastGiven == spec.Given {
 		return
 	}
-	fmt.Printf("\n%s  Given %s%s\n", MSpec.AnsiOfGiven, padLf(spec.Given, 2), colors.Reset)
+	fmt.Printf("%s  Given %s%s\n", MSpec.AnsiOfGiven, padLf(spec.Given, 2), colors.Reset)
 	MSpec.lastGiven = spec.Given
 }
 

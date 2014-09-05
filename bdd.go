@@ -83,6 +83,8 @@ func Given(t *testing.T, given string, when ...func(When)) {
 
 	// reset to default
 	MSpec.resetLasts()
+
+	fmt.Println()
 }
 
 // When defines the action or event when Given a specific context.
