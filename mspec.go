@@ -1,7 +1,6 @@
 package gomspec
 
 import (
-	"github.com/eduncan911/gomspec/asserts"
 	"github.com/eduncan911/gomspec/colors"
 	"strings"
 )
@@ -46,7 +45,7 @@ func init() {
 
 	// register the default Assertions package
 	MSpec.AssertionsFn(func(s *Specification) Assert {
-		return asserts.NewAssertions()
+		return newAssertions(s)
 	})
 }
 

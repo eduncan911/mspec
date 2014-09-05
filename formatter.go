@@ -20,11 +20,12 @@ type formatter interface {
 }
 
 type failingLine struct {
-	content  string
-	filename string
-	next     string
-	number   int
 	prev     string
+	content  string
+	next     string
+	filename string
+	number   int
+	lines    []string
 }
 
 func (spec *Specification) PrintFeature() {
@@ -57,6 +58,9 @@ func (spec *Specification) PrintSpec() {
 }
 
 func (spec *Specification) PrintTitleWithError() {
+	if MSpec.lastSpec == spec.Spec {
+		return
+	}
 	fmt.Printf("%s    » It %s %s\n", MSpec.AnsiOfThenWithError, spec.Spec, colors.Reset)
 	MSpec.lastSpec = spec.Spec
 }
@@ -73,26 +77,34 @@ func (spec *Specification) PrintError(message string) {
 		return
 	}
 
-	fmt.Printf("%s      %s%s\n", MSpec.AnsiOfExpectedError, message, colors.Reset)
-	fmt.Printf("%s      %s:%d%s\n", MSpec.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
+	fmt.Printf("%s%s%s\n", MSpec.AnsiOfExpectedError, message, colors.Reset)
+	fmt.Printf("%s        in %s:%d%s\n", MSpec.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
 	spec.PrintFailingLine(&failingLine)
 	spec.T.Fail()
 }
 
 func (spec *Specification) PrintFailingLine(failingLine *failingLine) {
-	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number-1, failingLine.prev, colors.Reset)
+	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number-1, softTabs(failingLine.prev), colors.Reset)
 	fmt.Printf("%s        %d. %s %s\n", MSpec.AnsiOfCodeError, failingLine.number, failingLine.content, colors.Reset)
-	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number+1, failingLine.next, colors.Reset)
+	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number+1, softTabs(failingLine.next), colors.Reset)
 	fmt.Println()
 }
 
 func getFailingLine() (failingLine, error) {
-	_, filename, ln, _ := runtime.Caller(3)
+
+	// this entire func is now a hack because of where it is being called,
+	// which is now one caller higher.  previously it was being called in the
+	// Expect struct which had the right caller info.  but now, it is being
+	// called after the Assertion has been executed to print details to the
+	// string.
+
+	_, filename, ln, _ := runtime.Caller(5)
+
 	// TODO: this is really hacky, need to find a way of not using magic numbers for runtime.Caller
 	// If we are not in a test file, we must still be inside this package,
 	// so we need to go up one more stack frame to get to the test file
 	if !strings.HasSuffix(filename, "_test.go") {
-		_, filename, ln, _ = runtime.Caller(4)
+		_, filename, ln, _ = runtime.Caller(6)
 	}
 
 	bf, err := ioutil.ReadFile(filename)
@@ -104,11 +116,11 @@ func getFailingLine() (failingLine, error) {
 	lines := strings.Split(string(bf), "\n")[ln-2 : ln+2]
 
 	return failingLine{
-		softTabs(lines[1]),
-		filename,
-		softTabs(lines[2]),
-		int(ln),
-		softTabs(lines[0]),
+		prev:     softTabs(lines[0]),
+		content:  softTabs(lines[1]),
+		next:     softTabs(lines[2]),
+		filename: filename,
+		number:   int(ln),
 	}, nil
 
 }

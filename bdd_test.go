@@ -10,11 +10,12 @@ func Test_Bdd_Specifications(t *testing.T) {
 
 		when("an event occurs", func(it It) {
 			it("should evaluate 1s are equal", func(assert Assert) {
-				assert.Equal(1, 2)
+				assert.Equal(1, 2, "It fucked up")
+				assert.Contains("shop", "gogo")
 			})
 
 			it("should also evaluate 3 and 4 are not equal", func(assert Assert) {
-				assert.NotEqual(3, 4)
+				assert.False(true, "Well darn!")
 			})
 
 			it("should perform another evaluation", func(assert Assert) {

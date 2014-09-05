@@ -9,26 +9,31 @@ import (
 
 // Specification holds the state of the context for a specific specification.
 type Specification struct {
-	T       *testing.T
-	Feature string
-	Given   string
-	When    string
-	Spec    string
-	Fn      func(Assert)
+	T                       *testing.T
+	Feature                 string
+	Given                   string
+	When                    string
+	Spec                    string
+	AssertFn                func(Assert)
+	AssertionFailed         bool
+	AssertionFailedMessages []string
 }
 
 func (spec *Specification) run() {
 
-	// maybe print everything from here now?
+	// print our story before any assertion output (if any)
 	spec.PrintFeature()
 	spec.PrintContext()
 	spec.PrintWhen()
 
-	// TODO need a way to test for the assert failing here,
-	// then control which spec result we print.
-	spec.PrintSpec()
+	// execute the Assertion
+	spec.AssertFn(MSpec.assertFn(spec))
 
-	spec.Fn(MSpec.assertFn(spec))
+	// if there was no error (which handles its own printing),
+	// print the spec here.
+	if !spec.AssertionFailed {
+		spec.PrintSpec()
+	}
 }
 
 // Given defines the Feature's specific context to be spec'd out.
@@ -38,12 +43,13 @@ func Given(t *testing.T, given string, whenFn func(When)) {
 		itFn(func(it string, assertFn func(Assert)) {
 
 			spec := &Specification{
-				t,
-				featureDesc(6),
-				given,
-				when,
-				it,
-				assertFn,
+				T:               t,
+				Feature:         featureDesc(6),
+				Given:           given,
+				When:            when,
+				Spec:            it,
+				AssertFn:        assertFn,
+				AssertionFailed: false,
 			}
 			spec.run()
 
@@ -60,6 +66,7 @@ type When func(when string, fn func(It))
 // It defines the specification of when something happens.
 type It func(title string, fn func(Assert))
 
+// TODO verify works
 // Setup is used to define before/after (setup/teardown) functions.
 func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
 	return func(fn func(Assert)) func(Assert) {
@@ -74,6 +81,7 @@ func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
 // NotImplemented is used to mark a specification that needs coding out.
 func NotImplemented() func(Assert) {
 	return func(assert Assert) {
+		// TODO implement
 		//expect(nil).notImplemented()
 	}
 }
