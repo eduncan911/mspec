@@ -10,8 +10,7 @@ func Test_Bdd_Specifications(t *testing.T) {
 
 		when("an event occurs", func(it It) {
 			it("should evaluate 1s are equal", func(assert Assert) {
-				assert.Equal(1, 2, "It fucked up")
-				assert.Contains("shop", "gogo")
+
 			})
 
 			it("should also evaluate 3 and 4 are not equal", func(assert Assert) {
@@ -19,7 +18,8 @@ func Test_Bdd_Specifications(t *testing.T) {
 			})
 
 			it("should perform another evaluation", func(assert Assert) {
-				//expect(4).ToNotEqual(5)
+				assert.Contains("shop", "gogo")
+				assert.Equal(1, 2, "It fucked up")
 			})
 
 			it("should not have this implemented", NA())

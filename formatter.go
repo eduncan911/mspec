@@ -79,6 +79,7 @@ func (spec *Specification) PrintError(message string) {
 
 	fmt.Printf("%s%s%s\n", MSpec.AnsiOfExpectedError, message, colors.Reset)
 	fmt.Printf("%s        in %s:%d%s\n", MSpec.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
+	fmt.Printf("%s        ---------\n", MSpec.AnsiOfCode)
 	spec.PrintFailingLine(&failingLine)
 	spec.T.Fail()
 }
