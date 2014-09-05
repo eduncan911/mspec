@@ -50,12 +50,12 @@ func Test_Bdd_Specifications(t *testing.T) {
 			setup := Setup(before, after)
 
 			it("should increment count to 1", setup(func(assert Assert) {
-				//expect(count).ToEqual(1)
+				assert.Equal(1, count)
 			}))
 
-			if count != 0 {
-				t.Error("In BDD-specs, count should have been reset to zero by the teardown func")
-			}
+			it("should decrement comment during teardown back to 0", func(assert Assert) {
+				assert.Equal(0, count)
+			})
 		})
 	})
 
