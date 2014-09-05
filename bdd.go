@@ -17,6 +17,8 @@ type Specification struct {
 	AssertFn                func(Assert)
 	AssertionFailed         bool
 	AssertionFailedMessages []string
+
+	notImplemented bool
 }
 
 func (spec *Specification) run() {
@@ -31,7 +33,9 @@ func (spec *Specification) run() {
 
 	// if there was no error (which handles its own printing),
 	// print the spec here.
-	if !spec.AssertionFailed {
+	if spec.notImplemented {
+		spec.PrintTitleNotImplemented()
+	} else if !spec.AssertionFailed {
 		spec.PrintSpec()
 	}
 }
@@ -40,18 +44,35 @@ func (spec *Specification) run() {
 func Given(t *testing.T, given string, whenFn func(When)) {
 
 	whenFn(func(when string, itFn func(It)) {
-		itFn(func(it string, assertFn func(Assert)) {
+		itFn(func(it string, assertFn ...func(Assert)) {
 
-			spec := &Specification{
-				T:               t,
-				Feature:         featureDesc(6),
-				Given:           given,
-				When:            when,
-				Spec:            it,
-				AssertFn:        assertFn,
-				AssertionFailed: false,
+			if len(assertFn) > 0 {
+				for _, fn := range assertFn {
+					spec := &Specification{
+						T:               t,
+						Feature:         featureDesc(6),
+						Given:           given,
+						When:            when,
+						Spec:            it,
+						AssertFn:        fn,
+						AssertionFailed: false,
+						notImplemented:  false,
+					}
+					spec.run()
+				}
+			} else {
+				spec := &Specification{
+					T:               t,
+					Feature:         featureDesc(6),
+					Given:           given,
+					When:            when,
+					Spec:            it,
+					AssertFn:        notImplemented(),
+					AssertionFailed: false,
+					notImplemented:  true,
+				}
+				spec.run()
 			}
-			spec.run()
 
 		})
 	})
@@ -64,7 +85,7 @@ func Given(t *testing.T, given string, whenFn func(When)) {
 type When func(when string, fn func(It))
 
 // It defines the specification of when something happens.
-type It func(title string, fn func(Assert))
+type It func(title string, fn ...func(Assert))
 
 // TODO verify works
 // Setup is used to define before/after (setup/teardown) functions.
@@ -79,16 +100,10 @@ func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
 }
 
 // NotImplemented is used to mark a specification that needs coding out.
-func NotImplemented() func(Assert) {
+var notImplemented = func() func(Assert) {
 	return func(assert Assert) {
-		// TODO implement
-		//expect(nil).notImplemented()
+		// nothing to do here
 	}
-}
-
-// NA is shorthand for the NotImplemented() function.
-func NA() func(Assert) {
-	return NotImplemented()
 }
 
 var featureDesc = func(callerDepth int) string {
