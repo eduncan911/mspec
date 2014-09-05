@@ -41,53 +41,56 @@ func (spec *Specification) run() {
 }
 
 // Given defines the Feature's specific context to be spec'd out.
-func Given(t *testing.T, given string, whenFn func(When)) {
+func Given(t *testing.T, given string, when ...func(When)) {
 
-	whenFn(func(when string, itFn func(It)) {
-		itFn(func(it string, assertFn ...func(Assert)) {
-
-			if len(assertFn) > 0 {
-				for _, fn := range assertFn {
-					spec := &Specification{
-						T:               t,
-						Feature:         featureDesc(6),
-						Given:           given,
-						When:            when,
-						Spec:            it,
-						AssertFn:        fn,
-						AssertionFailed: false,
-						notImplemented:  false,
+	for _, whenFn := range when {
+		whenFn(func(when string, its ...func(It)) {
+			for _, itFn := range its {
+				itFn(func(it string, assertFns ...func(Assert)) {
+					if len(assertFns) > 0 {
+						// having at least 1 assert means we are implemented
+						for _, fn := range assertFns {
+							spec := &Specification{
+								T:               t,
+								Feature:         featureDesc(6),
+								Given:           given,
+								When:            when,
+								Spec:            it,
+								AssertFn:        fn,
+								AssertionFailed: false,
+								notImplemented:  false,
+							}
+							spec.run()
+						}
+					} else {
+						// else, we are not implemented
+						spec := &Specification{
+							T:               t,
+							Feature:         featureDesc(6),
+							Given:           given,
+							When:            when,
+							Spec:            it,
+							AssertFn:        notImplemented(),
+							AssertionFailed: false,
+							notImplemented:  true,
+						}
+						spec.run()
 					}
-					spec.run()
-				}
-			} else {
-				spec := &Specification{
-					T:               t,
-					Feature:         featureDesc(6),
-					Given:           given,
-					When:            when,
-					Spec:            it,
-					AssertFn:        notImplemented(),
-					AssertionFailed: false,
-					notImplemented:  true,
-				}
-				spec.run()
+				})
 			}
-
 		})
-	})
+	}
 
 	// reset to default
 	MSpec.resetLasts()
 }
 
 // When defines the action or event when Given a specific context.
-type When func(when string, fn func(It))
+type When func(when string, it ...func(It))
 
 // It defines the specification of when something happens.
-type It func(title string, fn ...func(Assert))
+type It func(title string, assert ...func(Assert))
 
-// TODO verify works
 // Setup is used to define before/after (setup/teardown) functions.
 func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
 	return func(fn func(Assert)) func(Assert) {
