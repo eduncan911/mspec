@@ -7,6 +7,7 @@ import (
 	"path"
 	"runtime"
 	"strings"
+	"testing"
 )
 
 type formatter interface {
@@ -26,6 +27,20 @@ type failingLine struct {
 	filename string
 	number   int
 	lines    []string
+}
+
+// Specification holds the state of the context for a specific specification.
+type Specification struct {
+	T                       *testing.T
+	Feature                 string
+	Given                   string
+	When                    string
+	Spec                    string
+	AssertFn                func(Assert)
+	AssertionFailed         bool
+	AssertionFailedMessages []string
+
+	notImplemented bool
 }
 
 func (spec *Specification) PrintFeature() {
@@ -57,7 +72,7 @@ func (spec *Specification) PrintSpec() {
 	MSpec.lastSpec = spec.Spec
 }
 
-func (spec *Specification) PrintTitleWithError() {
+func (spec *Specification) PrintSpecWithError() {
 	if MSpec.lastSpec == spec.Spec {
 		return
 	}
@@ -65,7 +80,7 @@ func (spec *Specification) PrintTitleWithError() {
 	MSpec.lastSpec = spec.Spec
 }
 
-func (spec *Specification) PrintTitleNotImplemented() {
+func (spec *Specification) PrintSpecNotImplemented() {
 	fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", MSpec.AnsiOfThenNotImplemented, spec.Spec, colors.Reset)
 	MSpec.lastSpec = spec.Spec
 }
@@ -80,15 +95,11 @@ func (spec *Specification) PrintError(message string) {
 	fmt.Printf("%s%s%s\n", MSpec.AnsiOfExpectedError, message, colors.Reset)
 	fmt.Printf("%s        in %s:%d%s\n", MSpec.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
 	fmt.Printf("%s        ---------\n", MSpec.AnsiOfCode)
-	spec.PrintFailingLine(&failingLine)
-	spec.T.Fail()
-}
-
-func (spec *Specification) PrintFailingLine(failingLine *failingLine) {
 	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number-1, softTabs(failingLine.prev), colors.Reset)
 	fmt.Printf("%s        %d. %s %s\n", MSpec.AnsiOfCodeError, failingLine.number, failingLine.content, colors.Reset)
 	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number+1, softTabs(failingLine.next), colors.Reset)
 	fmt.Println()
+	spec.T.Fail()
 }
 
 func getFailingLine() (failingLine, error) {
@@ -101,7 +112,7 @@ func getFailingLine() (failingLine, error) {
 
 	_, filename, ln, _ := runtime.Caller(5)
 
-	// TODO: this is really hacky, need to find a way of not using magic numbers for runtime.Caller
+	// this is really hacky, need to find a way of not using magic numbers for runtime.Caller
 	// If we are not in a test file, we must still be inside this package,
 	// so we need to go up one more stack frame to get to the test file
 	if !strings.HasSuffix(filename, "_test.go") {

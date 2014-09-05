@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_Bdd_Specifications(t *testing.T) {
+func Test_BDD_Specifications(t *testing.T) {
 
 	Given(t, "a unique scenerio", func(when When) {
 
@@ -59,4 +59,36 @@ func Test_Bdd_Specifications(t *testing.T) {
 		})
 	})
 
+}
+
+func Test_Specing_A_New_Feature(t *testing.T) {
+
+	// you can quickly spec new features with little syntax noise
+	//
+
+	// GIVEN a valid Api, what shall we do?  not sure yet.
+	//
+	Given(t, "a valid Api")
+
+	// GIVEN an invalid Api...
+	//
+	Given(t, "an invalid Api", func(when When) {
+
+		// ...WHEN GetUsers is called, we don't know what SHOULD happen yet.
+		//
+		when("GetUsers is called")
+
+		// ...WHEN GetStatus is called...
+		//
+		when("GetStatus is called", func(it It) {
+
+			// ...IT SHOULD return an invalid status code
+			it("should return an invalid status code")
+
+			// ...IT SHOULD return an error message
+			it("should return an error message")
+
+		})
+
+	})
 }

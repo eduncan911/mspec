@@ -49,8 +49,8 @@ func init() {
 	})
 }
 
-// RegisterAssertions will assign the assertions used for all tests.
-// MyCustomAsserts must implement the gomspeg.Assert interface.
+// AssertionsFn will assign the assertions used for all tests.
+// MyCustomAsserts must implement the gomspec.Assert interface.
 //
 //    MSpec.RegisterAssertions(func(s *Specification) Assert {
 //        return &MyCustomAssertions{}
@@ -59,8 +59,8 @@ func (c *MSpecConfig) AssertionsFn(fn func(s *Specification) Assert) {
 	c.assertFn = fn
 }
 
-func (m *MSpecConfig) resetLasts() {
-	m.lastGiven = ""
-	m.lastWhen = ""
-	m.lastSpec = ""
+func (c *MSpecConfig) resetLasts() {
+	c.lastGiven = ""
+	c.lastWhen = ""
+	c.lastSpec = ""
 }

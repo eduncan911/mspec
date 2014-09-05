@@ -35,14 +35,16 @@ type mspectTestingT struct {
 func (m *mspectTestingT) Errorf(format string, args ...interface{}) {
 	// because we control the output of specification, we
 	// need to store these details in a state for later use in
-	// the bdd framework.
+	// the bdd framework.  to do that, we use the
+	// m.spec.AssertionFailed boolean.
+	m.spec.AssertionFailed = true
 
-	// string foo
+	// parse out Testify's location info by removing the first
+	// line and reformat their Error message to our liking
+	// using string foo
 	err := fmt.Sprintf(format, args...)
 	err = strings.Replace(err, "\r", "", -1)
-	err = strings.Replace(err, "        ", "\t\t\t", -1)
-
-	// parse out Testify's location info by removing the first line
+	err = strings.Replace(err, "        ", "\t\t\t", -1) // some errors are two-liners
 	lines := strings.Split(err, "\n")
 	out := ""
 	for i := range lines {
@@ -59,15 +61,16 @@ func (m *mspectTestingT) Errorf(format string, args ...interface{}) {
 		}
 	}
 
-	// if len(lines) >= 4 {
-	// 	out = strings.Join([]string{lines[1], "\n", lines[2]}, "")
-	// } else if len(lines) == 3 {
-	// 	out = lines[1]
-	// }
-
-	m.spec.PrintTitleWithError()
+	m.spec.PrintSpecWithError()
+	// to propertly set the caller used, we currently need to call
+	// m.spec.PrinterError here to capture the proper line number.
+	// and since PrintError() comes after PrintTitleWithError(),
+	// we have the line above.
+	//
+	// TODO refactor to pass the caller information down along with
+	// the custom error message parsing.  that way we can control the
+	// printing internally and seal up these Print*() messages.
 	m.spec.PrintError(out)
-	m.spec.AssertionFailed = true
 }
 
 // NewAssertions constructs a wrapper around Testify's asserts.

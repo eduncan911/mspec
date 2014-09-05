@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_Mspec_Instances(t *testing.T) {
+func Test_MSpec_Instances(t *testing.T) {
 
 	Given(t, "an mspec instance", func(when When) {
 

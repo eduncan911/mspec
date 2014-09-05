@@ -7,26 +7,7 @@ import (
 	"testing"
 )
 
-// Specification holds the state of the context for a specific specification.
-type Specification struct {
-	T                       *testing.T
-	Feature                 string
-	Given                   string
-	When                    string
-	Spec                    string
-	AssertFn                func(Assert)
-	AssertionFailed         bool
-	AssertionFailedMessages []string
-
-	notImplemented bool
-}
-
 func (spec *Specification) run() {
-
-	// print our story before any assertion output (if any)
-	spec.PrintFeature()
-	spec.PrintContext()
-	spec.PrintWhen()
 
 	// execute the Assertion
 	spec.AssertFn(MSpec.assertFn(spec))
@@ -34,7 +15,7 @@ func (spec *Specification) run() {
 	// if there was no error (which handles its own printing),
 	// print the spec here.
 	if spec.notImplemented {
-		spec.PrintTitleNotImplemented()
+		spec.PrintSpecNotImplemented()
 	} else if !spec.AssertionFailed {
 		spec.PrintSpec()
 	}
@@ -43,39 +24,41 @@ func (spec *Specification) run() {
 // Given defines the Feature's specific context to be spec'd out.
 func Given(t *testing.T, given string, when ...func(When)) {
 
+	// setup the spec that we will be using
+	spec := &Specification{
+		T:       t,
+		Feature: featureDesc(2),
+		Given:   given,
+	}
+	spec.PrintFeature()
+	spec.PrintContext()
+
 	for _, whenFn := range when {
 		whenFn(func(when string, its ...func(It)) {
+
+			spec.When = when
+			spec.PrintWhen()
+
 			for _, itFn := range its {
 				itFn(func(it string, assertFns ...func(Assert)) {
+
+					spec.Spec = it
+					// Spec output is handled in the spec.run() below
+
 					if len(assertFns) > 0 {
 						// having at least 1 assert means we are implemented
-						for _, fn := range assertFns {
-							spec := &Specification{
-								T:               t,
-								Feature:         featureDesc(6),
-								Given:           given,
-								When:            when,
-								Spec:            it,
-								AssertFn:        fn,
-								AssertionFailed: false,
-								notImplemented:  false,
-							}
-							spec.run()
+						for _, assertFn := range assertFns {
+							spec.AssertFn = assertFn
+							spec.notImplemented = false
 						}
 					} else {
-						// else, we are not implemented
-						spec := &Specification{
-							T:               t,
-							Feature:         featureDesc(6),
-							Given:           given,
-							When:            when,
-							Spec:            it,
-							AssertFn:        notImplemented(),
-							AssertionFailed: false,
-							notImplemented:  true,
-						}
-						spec.run()
+						spec.AssertFn = notImplemented()
+						spec.notImplemented = true
 					}
+
+					// run() handles contextual printing and some delegation
+					// to the Assert's implemention for error handling
+					spec.run()
 				})
 			}
 		})
