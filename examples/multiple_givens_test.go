@@ -18,12 +18,12 @@ func Test_Multiple_Givens(t *testing.T) {
 
 			d := BirthDog()
 
-			it("should be a normal color", func(expect Expect) {
-				expect(d.color).ToEqual(normalColor)
+			it("should be a normal color", func(assert Assert) {
+				assert.Equal(d.color, normalColor)
 			})
 
-			it("should not need washing", func(expect Expect) {
-				expect(d.washed).ToEqual(false)
+			it("should not need washing", func(assert Assert) {
+				assert.False(d.washed)
 			})
 		})
 	})
@@ -40,16 +40,16 @@ func Test_Multiple_Givens(t *testing.T) {
 				iswashable: false,
 			})
 
-			it("should have paint on it", func(expect Expect) {
-				expect(d.paint).ToExist()
+			it("should have paint on it", func(assert Assert) {
+				assert.NotNil(d.paint)
 			})
 
-			it("should be the color green", func(expect Expect) {
-				expect(d.color).ToEqual(colorToPaint)
+			it("should be the color green", func(assert Assert) {
+				assert.Equal(d.color, colorToPaint)
 			})
 
-			it("should not be washed", func(expect Expect) {
-				expect(d.washed).ToEqual(false)
+			it("should not be washed", func(assert Assert) {
+				assert.False(d.washed)
 			})
 		})
 	})
@@ -66,16 +66,16 @@ func Test_Multiple_Givens(t *testing.T) {
 
 			d.Wash()
 
-			it("should have the paint come off", func(expect Expect) {
-				expect(d.paint).ToNotExist()
+			it("should have the paint come off", func(assert Assert) {
+				assert.Nil(d.paint)
 			})
 
-			it("should be a normal color", func(expect Expect) {
-				expect(d.color).ToEqual(normalColor)
+			it("should be a normal color", func(assert Assert) {
+				assert.Equal(d.color, normalColor)
 			})
 
-			it("should smell like a clean dog", func(expect Expect) {
-				expect(d.washed).ToEqual(true)
+			it("should smell like a clean dog", func(assert Assert) {
+				assert.True(d.washed)
 			})
 		})
 	})
@@ -83,22 +83,18 @@ func Test_Multiple_Givens(t *testing.T) {
 	/* Outputs:
 
 	Feature: Multiple Givens
-
 	  Given no dogs available
-
 	    When creating a new dog
 	    » It should be a normal color
 	    » It should not need washing
 
 	  Given an unpainted dog
-
 	    When painting the dog a permanent green
 	    » It should should have paint
 	    » It should be the color green
 	    » It should not be washed
 
 	  Given a painted dog
-
 	    When washing the dog
 	    » It should have the paint come off
 	    » It should be a normal color

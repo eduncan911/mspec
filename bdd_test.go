@@ -4,27 +4,31 @@ import (
 	"testing"
 )
 
-func Test_Bdd_Specifications(t *testing.T) {
+func Test_BDD_Specifications(t *testing.T) {
 
 	Given(t, "a unique scenerio", func(when When) {
 
 		when("an event occurs", func(it It) {
-			it("should evaluate to 1", func(expect Expect) {
-				expect(1).ToEqual(1)
+			it("should evaluate 1s are equal", func(assert Assert) {
+				assert.Equal(1, 1)
 			})
 
-			it("should also evaluate to 3", func(expect Expect) {
-				expect(3).ToEqual(3)
+			it("should also evaluate 3 and 4 are not equal", func(assert Assert) {
+				assert.NotEqual(3, 4)
 			})
 
-			it("should perform another evaluation", func(expect Expect) {
-				expect(4).ToNotEqual(5)
+			it("should not have this implemented")
+
+			it("should perform another evaluation", func(assert Assert) {
+				assert.Contains("shoppy", "opp")
 			})
 
-			it("should not have this implemented", NA())
+			it("should error here", func(assert Assert) {
+				assert.True(false)
+			})
 
-			it("should also perform another evaluation", func(expect Expect) {
-				expect("hellow").ToNotEqual("world")
+			it("should also perform another evaluation", func(assert Assert) {
+				assert.NotEqual("hello", "world")
 			})
 		})
 	})
@@ -45,14 +49,46 @@ func Test_Bdd_Specifications(t *testing.T) {
 
 			setup := Setup(before, after)
 
-			it("should increment count to 1", setup(func(expect Expect) {
-				expect(count).ToEqual(1)
+			it("should increment count to 1", setup(func(assert Assert) {
+				assert.Equal(1, count)
 			}))
 
-			if count != 0 {
-				t.Error("In BDD-specs, count should have been reset to zero by the teardown func")
-			}
+			it("should decrement comment during teardown back to 0", func(assert Assert) {
+				assert.Equal(0, count)
+			})
 		})
 	})
 
+}
+
+func Test_Specing_A_New_Feature(t *testing.T) {
+
+	// you can quickly spec new features with little syntax noise
+	//
+
+	// GIVEN a valid Api, what shall we do?  not sure yet.
+	//
+	Given(t, "a valid Api")
+
+	// GIVEN an invalid Api...
+	//
+	Given(t, "an invalid Api", func(when When) {
+
+		// ...WHEN GetUsers is called, we don't know what SHOULD happen yet.
+		//
+		when("GetUsers is called")
+
+		// ...WHEN GetStatus is called...
+		//
+		when("GetStatus is called", func(it It) {
+
+			// ...IT SHOULD return an invalid status code
+			it("should return an invalid status code")
+
+			// ...IT SHOULD return an error message
+			it("should return an error message")
+
+		})
+
+	})
 }

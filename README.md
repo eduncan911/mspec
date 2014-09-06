@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 LEGACY: *This version 0.1 is tagged for the last version with backwards compatibility with [Pranavraja's Zen](https://github.com/pranavraja/zen) package.  Going forward, there are breaking changes that are not.  
 
 You may submit issues and pull requests against this tag version `0.1` and I will continue to support it.  Just note what version it is.*
 
 # GoMSpec 0.1
+=======
+2014/09/06 - I've completed a large refactor; but, I haven't updated this README / documentation updates yet.  I've released this to `master` for dog-fooding to any quirks that may show up.
+
+## GoMSpec
+>>>>>>> develop
 
 A BDD Feature Specifications testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios before any code is written.  This leaves you free to think of your project and features as a whole without the distraction of writing code.
 
@@ -175,30 +181,68 @@ While keeping backwards compatibility with his existing Zen framework, I defined
 
 That last goal above is key and I think is what speaks truly about what BDD is: focus on the story, feature and/or context you are designing - focus on the Behavior!  I tended to design my C# code using Machine.Specifications in this BDD-style by writing entire stories and grand specs up front - designing the system I was building, or the feature I was extending.  In C# land, it's not unheard of me hitting 50 to 100 specs across a single feature and a few different contexts in an hour or two, before writing any code.  Which at that point, I had everything planned out pretty much the way it should behave.  
 
-So with this framework, I came up with a simple method name, `NA()`, to keep the syntax noise down.  
-
-Therefore, you are free to code specs with just a little syntax noise:
+So with this framework, I came up with:
 
 ```go
 // defining specs in Go, without implementing or stubbing code
 //
-it("should do this", NA())
-it("should do that", NA())
-it("should not be red", NA())
-it("should not be from the year 8,000 BC", NA())
+package examples
+
+import (
+    . "github.com/eduncan911/gomspec"
+    "testing"
+)
+
+func Test_Specing_A_New_Feature(t *testing.T) {
+
+    // you can quickly spec new features with little syntax noise
+    //
+
+    // GIVEN a valid Api, what shall we do?  not sure yet.
+    //
+    Given(t, "a valid Api")
+
+    // GIVEN an invalid Api...
+    //
+    Given(t, "an invalid Api", func(when When) {
+
+        // ...WHEN GetUsers is called, we don't know what SHOULD happen yet.
+        //
+        when("GetUsers is called")
+
+        // ...WHEN GetStatus is called...
+        //
+        when("GetStatus is called", func(it It) {
+
+            // ...IT SHOULD return an invalid status code
+            it("should return an invalid status code")
+
+            // ...IT SHOULD return an error message
+            it("should return an error message")
+
+        })
+    })
+}
 ```
 
-I can live with that.  I think it is on par with Machine.Specifications' `Not Implemented` details:
+Note that `Given`, `when` and `it` all have optional variadic parameters.  THis allows you to spec things out as far as you want.
 
-```c#
-// this is how you do it in C# with MSpec
-It should_do_this;
-It should_do_that;
-it should_not_be_red;
-it should_not_be_from_the_year_8000_BC;
+Outputs:
+
+```
+    Feature: Specing A New Feature
+      Given a valid Api
+
+      Given an invalid Api
+        When GetUsers is called
+        When GetStatus is called
+        » It should return an invalid status code «-- NOT IMPLEMENTED
+        » It should return an error message «-- NOT IMPLEMENTED
+        » It should return an 200 http status code «-- NOT IMPLEMENTED
+
 ```
 
-Those underscores always bugged me.  So it's a trade off to have free-form quoted text verses defining a delegate with underscores that I always fat-fingering.
+
 
 # Roadmap
 
@@ -211,3 +255,4 @@ Those underscores always bugged me.  So it's a trade off to have free-form quote
 * surpressing output (quiet)
 * concurrent channel execution of `it`s
 
+NOTE: If you are looking for the Zen version that remains compatible with Pranavraja's Zen](https://github.com/pranavraja/zen) version, you will want to refer to the [specific tag v0.1](https://github.com/eduncan911/gomspec/tree/v0.1).

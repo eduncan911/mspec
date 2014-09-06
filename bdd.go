@@ -7,82 +7,91 @@ import (
 	"testing"
 )
 
-type specification struct {
-	T       *testing.T
-	Feature string
-	Context string
-	When    string
-	Title   string
-	Fn      func(Expect)
-}
+func (spec *Specification) run() {
 
-func (spec *specification) run() {
-	spec.Fn(func(val interface{}) *Expectation {
-		return &Expectation{val, spec}
-	})
+	// execute the Assertion
+	spec.AssertFn(MSpec.assertFn(spec))
+
+	// if there was no error (which handles its own printing),
+	// print the spec here.
+	if spec.notImplemented {
+		spec.PrintSpecNotImplemented()
+	} else if !spec.AssertionFailed {
+		spec.PrintSpec()
+	}
 }
 
 // Given defines the Feature's specific context to be spec'd out.
-func Given(t *testing.T, context string, scenerioWrapper func(When)) {
+func Given(t *testing.T, given string, when ...func(When)) {
 
-	scenerioWrapper(func(when string, testWrapper func(It)) {
-		testWrapper(func(it string, fn func(Expect)) {
-			spec := &specification{
-				t,
-				featureDesc(6),
-				context,
-				when,
-				it,
-				fn,
+	// setup the spec that we will be using
+	spec := &Specification{
+		T:       t,
+		Feature: featureDesc(2),
+		Given:   given,
+	}
+	spec.PrintFeature()
+	spec.PrintContext()
+
+	for _, whenFn := range when {
+		whenFn(func(when string, its ...func(It)) {
+
+			spec.When = when
+			spec.PrintWhen()
+
+			for _, itFn := range its {
+				itFn(func(it string, assertFns ...func(Assert)) {
+
+					spec.Spec = it
+					// Spec output is handled in the spec.run() below
+
+					if len(assertFns) > 0 {
+						// having at least 1 assert means we are implemented
+						for _, assertFn := range assertFns {
+							spec.AssertFn = assertFn
+							spec.notImplemented = false
+						}
+					} else {
+						spec.AssertFn = notImplemented()
+						spec.notImplemented = true
+					}
+
+					// run() handles contextual printing and some delegation
+					// to the Assert's implemention for error handling
+					spec.run()
+				})
 			}
-			spec.run()
 		})
-	})
+	}
 
 	// reset to default
-	mspec.resetLasts()
+	MSpec.resetLasts()
+
+	fmt.Println()
 }
 
 // When defines the action or event when Given a specific context.
-type When func(when string, fn func(It))
+type When func(when string, it ...func(It))
 
 // It defines the specification of when something happens.
-type It func(title string, fn func(Expect))
+type It func(title string, assert ...func(Assert))
 
 // Setup is used to define before/after (setup/teardown) functions.
-func Setup(before, after func()) func(fn func(Expect)) func(Expect) {
-	return func(fn func(Expect)) func(Expect) {
+func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
+	return func(fn func(Assert)) func(Assert) {
 		before()
-		return func(expect Expect) {
-			fn(expect)
+		return func(assert Assert) {
+			fn(assert)
 			after()
 		}
 	}
 }
 
 // NotImplemented is used to mark a specification that needs coding out.
-func NotImplemented() func(Expect) {
-	return func(expect Expect) { expect(nil).notImplemented() }
-}
-
-// NA is shorthand for the NotImplemented() function.
-func NA() func(Expect) {
-	return NotImplemented()
-}
-
-// Desc is legacy support for existing Zen users.
-func Desc(t *testing.T, desc string, wrapper func(It)) {
-	wrapper(func(it string, fn func(Expect)) {
-		spec := &specification{
-			t,
-			featureDesc(4),
-			"",
-			desc,
-			it,
-			fn,
-		}
-		spec.run()
-	})
+var notImplemented = func() func(Assert) {
+	return func(assert Assert) {
+		// nothing to do here
+	}
 }
 
 var featureDesc = func(callerDepth int) string {

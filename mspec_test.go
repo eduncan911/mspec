@@ -4,41 +4,41 @@ import (
 	"testing"
 )
 
-func Test_Mspec_Instances(t *testing.T) {
+func Test_MSpec_Instances(t *testing.T) {
 
 	Given(t, "an mspec instance", func(when When) {
 
 		f := "feature value"
 
-		mspecTest := &Mspec{
+		mspecTest := &MSpecConfig{
 			lastFeature: f,
-			lastContext: "context value",
+			lastGiven:   "context value",
 			lastWhen:    "when value",
-			lastTitle:   "title value",
+			lastSpec:    "title value",
 		}
 
 		when("calling reset()", func(it It) {
 
 			mspecTest.resetLasts()
 
-			it("should not reset lastFeature as that is used globally", func(expect Expect) {
-				expect(mspecTest.lastFeature).ToNotEqual("")
+			it("should not reset lastFeature as that is used globally", func(assert Assert) {
+				assert.NotEmpty(mspecTest.lastFeature)
 			})
 
-			it("should keep the lastFeature value", func(expect Expect) {
-				expect(mspecTest.lastFeature).ToEqual(f)
+			it("should keep the lastFeature value", func(assert Assert) {
+				assert.Equal(mspecTest.lastFeature, f)
 			})
 
-			it("should set lastContext to zero value", func(expect Expect) {
-				expect(mspecTest.lastContext).ToEqual("")
+			it("should set lastGiven to zero value", func(assert Assert) {
+				assert.Empty(mspecTest.lastGiven)
 			})
 
-			it("should set lastWhen to zero value", func(expect Expect) {
-				expect(mspecTest.lastWhen).ToEqual("")
+			it("should set lastWhen to zero value", func(assert Assert) {
+				assert.Empty(mspecTest.lastWhen)
 			})
 
-			it("should set lastTitle", func(expect Expect) {
-				expect(mspecTest.lastTitle).ToEqual("")
+			it("should set lastSpec", func(assert Assert) {
+				assert.Empty(mspecTest.lastSpec)
 			})
 		})
 	})
