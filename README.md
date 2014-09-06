@@ -6,6 +6,8 @@ A BDD Feature Specifications testing package for Go(Lang) with a strong emphases
 
 Source Documentation available at [![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec)
 
+The current version also implements Testify's 
+
 `GoMSpec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
 
 ```
@@ -14,8 +16,6 @@ Feature X
     When an event occurs
     Then it should do something
 ```
-
-Currently it has an included `Expectation` struct that mimics basic assertion behaviors.  Future plans may allow for custom assertion packages (like testify).
 
 ### Go Get It
 
@@ -51,16 +51,16 @@ func Test_Washing_Dogs(t *testing.T) {
 
             d.Wash()
 
-            it("should have the paint come off", func(expect Expect) {
-                expect(d.paint).ToNotExist()
+            it("should have the paint come off", func(assert Assert) {
+                assert.Nil(d.paint)
             })
 
-            it("should be a normal color", func(expect Expect) {
-                expect(d.color).ToEqual(normalColor)
+            it("should be a normal color", func(assert Assert) {
+                assert.Equal(d.color, normalColor)
             })
 
-            it("should smell like a clean dog", func(expect Expect) {
-                expect(d.washed).ToEqual(true)
+            it("should smell like a clean dog", func(assert Assert) {
+                assert.True(d.washed)
             })
         })
     })
@@ -83,14 +83,13 @@ Feature: Washing Dogs
   Given a dog that has been painted red
   and the paint is washable
   and no one has washed the dog yet
-
     When the dog is washed
     » It should have the paint come off
     » It should be a normal color
     » It should smell like a clean dog
 ```
 
-The output specifies the feature and then the scenario you are testing.  There are multiple output settings that can be configured.
+The output specifies the feature and then the scenario you are testing.  There are multiple output settings that can be configured as well.
 
 ## Errors are well defined
 
@@ -120,18 +119,18 @@ func Test_Creating_a_Client(t *testing.T) {
 
             c, err := NewClient(*pc)
 
-            it("should not return an error.", func(expect Expect) {
-                expect(err).ToNotExist()
+            it("should not return an error.", func(assert Assert) {
+                assert.NoError(err)
             })
 
-            it("should return a valid client object.", func(expect Expect) {
-                expect(c).ToExist()
+            it("should return a valid client object.", func(assert Assert) {
+                assert.NotNil(c)
             })
 
             // this will blow up!
             //
-            it("should generate a big error", func(expect Expect) {
-                expect(true).ToEqual(false)
+            it("should generate a big error", func(assert Assert) {
+                assert.True(false)
             })
         })
     })
@@ -144,7 +143,7 @@ Outputs:
 
 ## Examples
 
-Be sure to check out more examples in the examples/ folder.
+Be sure to check out more advanced examples in the examples/ folder including how to spec code without writing any implementation details.
 
 ```bash
 ~/go/src/github.com/eduncan911/gomspec$ cd examples/
@@ -239,7 +238,6 @@ Outputs:
 # Roadmap
 
 * write blog post
-* write wiki
 * more examples as well as custom formatters/expectations
 * `Setup()` examples
 * Total tests passed, errored, skipped
