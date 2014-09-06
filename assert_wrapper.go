@@ -2,7 +2,7 @@ package gomspec
 
 import (
 	"fmt"
-	"github.com/eduncan911/gomspec/asserts"
+	asserts "github.com/eduncan911/gomspec/assert"
 	"strings"
 )
 

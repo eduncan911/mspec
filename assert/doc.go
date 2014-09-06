@@ -147,4 +147,4 @@
 //    assert.InDelta(numA, numB, delta, [, message [, format-args]])
 //
 //    assert.InEpsilon(numA, numB, epsilon, [, message [, format-args]])
-package asserts
+package assert

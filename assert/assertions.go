@@ -1,4 +1,4 @@
-package asserts
+package assert
 
 import (
 	"bufio"

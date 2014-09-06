@@ -47,7 +47,7 @@ func (spec *Specification) PrintFeature() {
 	if MSpec.lastFeature == spec.Feature {
 		return
 	}
-	fmt.Printf("\n%sFeature: %s%s\n\n", MSpec.AnsiOfFeature, spec.Feature, colors.Reset)
+	fmt.Printf("%sFeature: %s%s\n", MSpec.AnsiOfFeature, spec.Feature, colors.Reset)
 	MSpec.lastFeature = spec.Feature
 }
 
@@ -63,7 +63,7 @@ func (spec *Specification) PrintWhen() {
 	if MSpec.lastWhen == spec.When {
 		return
 	}
-	fmt.Printf("\n%s    When %s%s\n", MSpec.AnsiOfWhen, spec.When, colors.Reset)
+	fmt.Printf("%s    When %s%s\n", MSpec.AnsiOfWhen, spec.When, colors.Reset)
 	MSpec.lastWhen = spec.When
 }
 
@@ -100,6 +100,7 @@ func (spec *Specification) PrintError(message string) {
 	fmt.Printf("%s        %d. %s%s\n", MSpec.AnsiOfCode, failingLine.number+1, softTabs(failingLine.next), colors.Reset)
 	fmt.Println()
 	spec.T.Fail()
+	fmt.Println()
 }
 
 func getFailingLine() (failingLine, error) {
