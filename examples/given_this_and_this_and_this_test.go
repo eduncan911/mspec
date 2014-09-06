@@ -32,16 +32,16 @@ func Test_Given_this_and_this_and_this(t *testing.T) {
 
 			d.Wash()
 
-			it("should have the paint come off", func(expect Expect) {
-				expect(d.paint).ToBeNil()
+			it("should have the paint come off", func(assert Assert) {
+				assert.Nil(d.paint)
 			})
 
-			it("should be a normal color", func(expect Expect) {
-				expect(d.color).ToEqual(normalColor)
+			it("should be a normal color", func(assert Assert) {
+				assert.Equal(d.color, normalColor)
 			})
 
-			it("should smell like a clean dog", func(expect Expect) {
-				expect(d.washed).ToEqual(true)
+			it("should smell like a clean dog", func(assert Assert) {
+				assert.True(d.washed)
 			})
 
 		})
@@ -50,7 +50,6 @@ func Test_Given_this_and_this_and_this(t *testing.T) {
 	/*	Outputs:
 
 		Feature: Given this and this and this
-
 		  Given a dog that has been painted red
 		  and the paint is washable
 		  and no one has washed the dog yet
