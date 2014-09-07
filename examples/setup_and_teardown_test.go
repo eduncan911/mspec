@@ -6,14 +6,16 @@ import (
 )
 
 /*
-	There are two forms of setting up and teardown a context
-	before exact specification is run:
+	There are two forms to setup and teardown a context for each
+	specification:
 
-		* On a Per Context basis, where the same instance of the
-		  context is shared across all specs.
+		* on a Per Context basis, where the same instance of the
+		  context is shared across all specs and assumes each specification
+		  will not mutex state.
 
 		* on a Per Spec basis, where the Setup and Teardown of
-		  the context happens for each and every Spec that is run.
+		  the context happens for each specification - mutating state before
+		  and after each spec is run.
 
 	MSpec supports the first one by default.
 
@@ -24,7 +26,7 @@ import (
 
 func Test_Setup_Shared_Context(t *testing.T) {
 
-	// this example shows a shared context
+	// this example shows the default shared context does not mutate.
 	//
 
 	Given(t, "a dog that has been painted\nand the paint is washable", func(when When) {
@@ -78,22 +80,61 @@ func Test_Setup_Shared_Context(t *testing.T) {
 
 func Test_Setup_NonShared_Context(t *testing.T) {
 
-	// this example shows a non-shared context in that the context
+	// this example shows a mutable context in that the context
 	// will always be run before the test, and then the teardown
 	// will deconstruct the context after the test.
 	//
+	// these types of tests are useful for setting up database connections
+	// or some other external dependencies that must be satisfied before
+	// the tests can run.
+	//
 
 	// TODO implement
-	Given(t, "a healthy dog", func(when When) {
+	Given(t, "a healthy dog after 1 year since last checkup", func(when When) {
+
+		d := BirthDog() // dog hasn't taken any steps yet
+
+		before := func() {
+			d.steps++ // dog must take at least 1 step before each spec
+		}
+
+		after := func() {
+			d.steps++ // dog takes another step after each spec
+		}
+
+		setup := Setup(before, after)
 
 		when("visiting the vet", func(it It) {
 
-			it("should have its blood checked")
+			d.VisitVet()
 
-			it("should have its teeth checked")
+			it("should have taken 1 step", setup(func(assert Assert) {
+				// first spec makes the dog take 1 step in setup()
+				assert.Equal(1, d.steps)
+			}))
 
+			it("should have taken 3 steps by now", setup(func(assert Assert) {
+				// before++ and after++ and before++ == 3
+				assert.Equal(3, d.steps)
+			}))
+
+			it("should have taken 4 steps total and no more setups", func(assert Assert) {
+				// because we are not using setup() here, the state
+				// of the dog's steps does not mutate.
+				assert.Equal(4, d.steps)
+			})
 		})
-
 	})
+
+	/* Outputs:
+
+	Feature: Setup NonShared Context
+	  Given a healthy dog after 1 year since last checkup
+	    When visiting the vet
+	    » It should have taken 1 step
+	    » It should have taken 3 steps by now
+	    » It should have taken 4 steps total and no more setups
+
+	*/
 
 }

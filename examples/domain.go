@@ -13,12 +13,11 @@ type paint struct {
 }
 
 type dog struct {
-	color        string
-	paint        *paint
-	washed       bool
-	timesWashed  int
-	passedAway   bool
-	hasBrokenLeg bool
+	color       string
+	paint       *paint
+	washed      bool
+	timesWashed int
+	steps       int
 }
 
 func BirthDog() *dog {
@@ -50,4 +49,7 @@ func (d *dog) Wash() error {
 	}
 
 	return errors.New("The paint is not washable!")
+}
+
+func (d *dog) VisitVet() {
 }
