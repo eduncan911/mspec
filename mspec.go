@@ -29,6 +29,27 @@ type MSpecConfig struct {
 }
 
 func init() {
+	MSpec = &MSpecConfig{}
+	MSpec.Defaults()
+}
+
+// AssertionsFn will assign the assertions used for all tests.
+// MyCustomAsserts must implement the gomspec.Assert interface.
+//
+//    MSpec.RegisterAssertions(func(s *Specification) Assert {
+//        return &MyCustomAssertions{}
+//    })
+func (c *MSpecConfig) AssertionsFn(fn func(s *Specification) Assert) {
+	c.assertFn = fn
+}
+
+// Defaults will reset all options back to their default configuration.
+// Useful for custom colors in the middle of a specification.  Do note
+// that this will also change the assertions package back to the default
+// Testify module.
+//
+//     MSpec.Reset()
+func (c *MSpecConfig) Defaults() {
 
 	// setup a default configuration
 	MSpec = &MSpecConfig{
@@ -47,16 +68,6 @@ func init() {
 	MSpec.AssertionsFn(func(s *Specification) Assert {
 		return newAssertions(s)
 	})
-}
-
-// AssertionsFn will assign the assertions used for all tests.
-// MyCustomAsserts must implement the gomspec.Assert interface.
-//
-//    MSpec.RegisterAssertions(func(s *Specification) Assert {
-//        return &MyCustomAssertions{}
-//    })
-func (c *MSpecConfig) AssertionsFn(fn func(s *Specification) Assert) {
-	c.assertFn = fn
 }
 
 func (c *MSpecConfig) resetLasts() {
