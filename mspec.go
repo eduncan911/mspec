@@ -1,4 +1,4 @@
-package gomspec
+package mspec
 
 import (
 	"github.com/eduncan911/gomspec/colors"
@@ -47,8 +47,6 @@ func (c *MSpecConfig) AssertionsFn(fn func(s *Specification) Assert) {
 // Useful for custom colors in the middle of a specification.  Do note
 // that this will also change the assertions package back to the default
 // Testify module.
-//
-//     MSpec.Reset()
 func (c *MSpecConfig) Defaults() {
 
 	// setup a default configuration

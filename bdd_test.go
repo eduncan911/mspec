@@ -1,4 +1,4 @@
-package gomspec
+package mspec
 
 import (
 	"testing"

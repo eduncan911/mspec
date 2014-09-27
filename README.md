@@ -1,12 +1,97 @@
-2014/09/06 - I've completed a large refactor; but, I haven't updated this README / documentation updates yet.  I've released this to `master` for dog-fooding to any quirks that may show up.
+# MSpec - Thou Shall Spec Features
 
-## GoMSpec
+`MSpec` is a BDD context/specification testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first, before any code is written using as little syntax noise as possible.  This leaves you free to think of your project and features as a whole without the distraction of writing any code with the added benefit of having tests ready for your project.
 
-A BDD Feature Specifications testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios before any code is written.  This leaves you free to think of your project and features as a whole without the distraction of writing code.
+[![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec) holds the source documentation (where else?)
 
-Source Documentation available at [![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec)
+Features
 
-The current version also implements Testify's 
+* Uses natural language (Given/When/Then)
+* Stubbing
+* Human-readable outputs
+* HTML output (coming soon)
+* Use custom Assertions
+* Configuration options
+* Uses Testify's rich assertions
+* Uses Go's built-in testing.T package
+
+# Go Get It
+
+Install it with one line of code:
+
+`go get github.com/eduncan911/gomspec`
+
+There are no external dependencies and it is built against Go's internal packages.  The only dependency is that you have [GOPATH setup normaly](https://golang.org/doc/code.html).
+
+# Go Stub a New Feature
+
+Using Dan North's original BDD definitions, you spec code using the Given/When/Then storyline similar to:
+
+```
+Feature X
+    Given a context
+    When an event occurs
+    Then it should do something
+```
+
+You represent these thoughts in your tests like this:
+
+```go
+// api_test.go
+package main
+
+import (
+    . "github.com/eduncan911/gomspec"
+    "testing"
+)
+
+func Test_API_Contract(t *testing.T) {
+
+    Given(t, "a valid Api")
+
+    Given(t, "an invalid Api", func(when When) {
+
+        when("GetStatus is called", func(it It) {
+
+            it("should return an invalid status code")
+
+            it("should return an error message")
+
+            it("should return an 200 http status code")
+
+        })
+
+        when("GetUsers is called")
+    })
+}
+```
+
+Note that `Given`, `when` and `it` all have optional variadic parameters.  This allows you to spec things out with as little or as far as you want.  
+
+This compiles and allows you to `go test` it immediately:
+
+```bash
+    $ go test
+      Feature: API Contract
+        Given a valid Api
+         
+        Given an invalid Api
+          When GetStatus is called
+          » It should return an invalid status code «-- NOT IMPLEMENTED
+          » It should return an error message «-- NOT IMPLEMENTED
+          » It should return an 200 http status code «-- NOT IMPLEMENTED
+            
+          When GetUsers is called
+
+```
+
+It is not uncommon to go back and tweak your stories over time as you talk with your domain experts, modifying exactly the scenarios and specifications that should happen.
+
+Print it out and stick it on your office door for everyone to see what you are working on.
+
+
+
+
 
 `GoMSpec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
 
@@ -17,11 +102,7 @@ Feature X
     Then it should do something
 ```
 
-### Go Get It
 
-`go get github.com/eduncan911/gomspec`
-
-There are no external dependencies and is built against Go's internal packages: it's simple and lightweight.
 
 ### Go Spec It
 
@@ -174,64 +255,6 @@ That last goal above is key and I think is what speaks truly about what BDD is: 
 
 So with this framework, I came up with:
 
-```go
-// defining specs in Go, without implementing or stubbing code
-//
-package examples
-
-import (
-    . "github.com/eduncan911/gomspec"
-    "testing"
-)
-
-func Test_Specing_A_New_Feature(t *testing.T) {
-
-    // you can quickly spec new features with little syntax noise
-    //
-
-    // GIVEN a valid Api, what shall we do?  not sure yet.
-    //
-    Given(t, "a valid Api")
-
-    // GIVEN an invalid Api...
-    //
-    Given(t, "an invalid Api", func(when When) {
-
-        // ...WHEN GetUsers is called, we don't know what SHOULD happen yet.
-        //
-        when("GetUsers is called")
-
-        // ...WHEN GetStatus is called...
-        //
-        when("GetStatus is called", func(it It) {
-
-            // ...IT SHOULD return an invalid status code
-            it("should return an invalid status code")
-
-            // ...IT SHOULD return an error message
-            it("should return an error message")
-
-        })
-    })
-}
-```
-
-Note that `Given`, `when` and `it` all have optional variadic parameters.  THis allows you to spec things out as far as you want.
-
-Outputs:
-
-```
-    Feature: Specing A New Feature
-      Given a valid Api
-
-      Given an invalid Api
-        When GetUsers is called
-        When GetStatus is called
-        » It should return an invalid status code «-- NOT IMPLEMENTED
-        » It should return an error message «-- NOT IMPLEMENTED
-        » It should return an 200 http status code «-- NOT IMPLEMENTED
-
-```
 
 
 

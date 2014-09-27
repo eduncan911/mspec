@@ -1,5 +1,5 @@
 /*
-Package gomspec is a BDD Feature Specifications testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first before any code is written.  This leaves you free to think of your project and features as a whole without the distraction of writing code.
+Package mspec is a BDD Feature Specifications testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first before any code is written.  This leaves you free to think of your project and features as a whole without the distraction of writing code.
 
 `GoMSpec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
 
@@ -127,4 +127,4 @@ Therefore, you are free to code specs with just a little syntax noise:
 	it("should not be from the year 8,000 BC", NA())
 
 */
-package gomspec
+package mspec

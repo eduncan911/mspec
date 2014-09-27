@@ -1,4 +1,4 @@
-package gomspec
+package mspec
 
 import (
 	"testing"
@@ -37,7 +37,7 @@ func Test_MSpec_Instances(t *testing.T) {
 				assert.Empty(mspecTest.lastWhen)
 			})
 
-			it("should set lastSpec", func(assert Assert) {
+			it("should set lastSpec to zero value", func(assert Assert) {
 				assert.Empty(mspecTest.lastSpec)
 			})
 		})
