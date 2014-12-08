@@ -10,7 +10,7 @@ import (
 func (spec *Specification) run() {
 
 	// execute the Assertion
-	spec.AssertFn(MSpec.assertFn(spec))
+	spec.AssertFn(config.assertFn(spec))
 
 	// if there was no error (which handles its own printing),
 	// print the spec here.
@@ -65,7 +65,7 @@ func Given(t *testing.T, given string, when ...func(When)) {
 	}
 
 	// reset to default
-	MSpec.resetLasts()
+	config.resetLasts()
 
 	fmt.Println()
 }
@@ -73,7 +73,7 @@ func Given(t *testing.T, given string, when ...func(When)) {
 // When defines the action or event when Given a specific context.
 type When func(when string, it ...func(It))
 
-// It defines the specification of when something happens.
+// It defines the specification of When something happens.
 type It func(title string, assert ...func(Assert))
 
 // Setup is used to define before/after (setup/teardown) functions.
@@ -87,7 +87,7 @@ func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
 	}
 }
 
-// NotImplemented is used to mark a specification that needs coding out.
+// notImplemented is used to mark a specification that needs coding out.
 var notImplemented = func() func(Assert) {
 	return func(assert Assert) {
 		// nothing to do here

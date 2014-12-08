@@ -5,10 +5,9 @@ import (
 	"strings"
 )
 
-// MSpec is global config for the package.
-var MSpec *MSpecConfig
+var config *MSpecConfig
 
-// MSpecConfig defines the configurations and registrations for package.
+// MSpecConfig defines the configuration used by the package.
 type MSpecConfig struct {
 	AnsiOfFeature            string
 	AnsiOfGiven              string
@@ -29,43 +28,39 @@ type MSpecConfig struct {
 }
 
 func init() {
-	MSpec = &MSpecConfig{}
-	MSpec.Defaults()
+	ResetConfig()
+
+	// register the default Assertions package
+	AssertionsFn(func(s *Specification) Assert {
+		return newAssertions(s)
+	})
 }
 
 // AssertionsFn will assign the assertions used for all tests.
-// MyCustomAsserts must implement the gomspec.Assert interface.
+// The specified struct must implement the mspec.Assert interface.
 //
-//    MSpec.RegisterAssertions(func(s *Specification) Assert {
-//        return &MyCustomAssertions{}
+//    mspec.AssertionsFn(func(s *Specification) Assert {
+//	    return &MyCustomAssertions{}
 //    })
-func (c *MSpecConfig) AssertionsFn(fn func(s *Specification) Assert) {
-	c.assertFn = fn
+func AssertionsFn(fn func(s *Specification) Assert) {
+	config.assertFn = fn
 }
 
-// Defaults will reset all options back to their default configuration.
-// Useful for custom colors in the middle of a specification.  Do note
-// that this will also change the assertions package back to the default
-// Testify module.
-func (c *MSpecConfig) Defaults() {
-
+// ResetConfig will reset all options back to their default configuration.
+// Useful for custom colors in the middle of a specification.
+func ResetConfig() {
 	// setup a default configuration
-	MSpec = &MSpecConfig{
+	config = &MSpecConfig{
 		AnsiOfFeature:            strings.Join([]string{colors.White}, ""),
 		AnsiOfGiven:              strings.Join([]string{colors.Grey}, ""),
 		AnsiOfWhen:               strings.Join([]string{colors.LightGreen}, ""),
 		AnsiOfThen:               strings.Join([]string{colors.Green}, ""),
 		AnsiOfThenNotImplemented: strings.Join([]string{colors.LightYellow}, ""),
 		AnsiOfThenWithError:      strings.Join([]string{colors.RegBg, colors.White, colors.Bold}, ""),
-		AnsiOfCode:               strings.Join([]string{colors.DarkGrey}, ""),
+		AnsiOfCode:               strings.Join([]string{colors.Grey}, ""),
 		AnsiOfCodeError:          strings.Join([]string{colors.White, colors.Bold}, ""),
 		AnsiOfExpectedError:      strings.Join([]string{colors.Red}, ""),
 	}
-
-	// register the default Assertions package
-	MSpec.AssertionsFn(func(s *Specification) Assert {
-		return newAssertions(s)
-	})
 }
 
 func (c *MSpecConfig) resetLasts() {

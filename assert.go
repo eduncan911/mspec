@@ -2,7 +2,11 @@ package mspec
 
 import "time"
 
-// Assert providers an interface to all assertions used by this package.
+// Assert is an interface used by each Specification that can used to
+// enforce a rule.
+//
+// Custom assertion packages may be defined by calling mspec.AssertionsFn(...).
+// An internal assert/forward_assertions.go currently implements the default instance at runtime.
 type Assert interface {
 
 	// Implements asserts that an object is implemented by the specified interface.

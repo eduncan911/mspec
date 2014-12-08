@@ -1,5 +1,124 @@
-/*
-Package mspec is a BDD Feature Specifications testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first before any code is written.  This leaves you free to think of your project and features as a whole without the distraction of writing code.
+/*Package mspec is a BDD context/specification testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first, before any code is written using as little syntax noise as possible.  This leaves you free to think of your project and features as a whole without the distraction of writing any code with the added benefit of having tests ready for your project.
+
+[![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec) holds the source documentation (where else?)
+
+Features
+
+* Uses natural language (Given/When/Then)
+* Stubbing
+* Human-readable outputs
+* HTML output (coming soon)
+* Use custom Assertions
+* Configuration options
+* Uses Testify's rich assertions
+* Uses Go's built-in testing.T package
+
+Go Get It
+
+Install it with one line of code:
+
+	go get github.com/eduncan911/gomspec
+
+There are no external dependencies and it is built against Go's internal packages.  The only dependency is that you have [GOPATH setup normaly](https://golang.org/doc/code.html).
+
+Go Stub Something
+
+Create a new file to hold your specs.
+
+	pico sample_test.go
+
+Using Dan North's original BDD definitions, you spec code using the Given/When/Then storyline similar to:
+
+	Feature X
+		Given a context
+		When an event occurs
+		Then it should do something
+
+But this is just a static example.  Let's take a real example from one of my projects:
+
+	Feature Public API Contracts
+		Given an invalid Api
+		When GetStatus is called
+		Then it should return an invalid status code
+		Then it should return an error message
+		Then it should return an 200 htp status code.
+
+You represent these thoughts in code like this:
+
+	package main
+
+	import (
+	    . "github.com/eduncan911/gomspec"
+	    "testing"
+	)
+
+	func Test_Public_API_Contract(t *testing.T) {
+
+	    Given(t, "an invalid Api", func(when When) {
+
+	        when("GetStatus is called", func(it It) {
+
+	            it("should return an invalid status code")
+
+	            it("should return an error message")
+
+	            it("should return an 200 http status code")
+
+	        })
+
+			// we can start designing our package immediately by specifying more contexts
+			// and specs.  there is no fuddling with real code that gets us off topic.
+	        when("GetUsers is called")
+	    })
+	}
+
+Note that `Given`, `when` and `it` all have optional variadic parameters.  This allows you to spec things out with as little or as far as you want.
+
+That's it.  Now run it:
+
+    $ go test
+    Feature: API Contract
+      Given an invalid Api
+        When GetStatus is called
+        » It should return an invalid status code «-- NOT IMPLEMENTED
+        » It should return an error message «-- NOT IMPLEMENTED
+        » It should return an 200 http status code «-- NOT IMPLEMENTED
+
+        When GetUsers is called
+
+	PASS
+	ok  	github.com/eduncan911/gomspec	0.001s
+
+Print it out and stick it on your office door for everyone to see what you are working on.
+
+This is actually colored output in Terminal:
+
+
+
+It is not uncommon to go back and tweak your stories over time as you talk with your domain experts, modifying exactly the scenarios and specifications that should happen.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 `GoMSpec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
 

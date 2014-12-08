@@ -20,7 +20,7 @@ import (
 
 	Errors are only handled this way under one condition: that
 	is that Errorf() be executed by the Assertion package.  Else,
-	we do not get the flag to know that an error has been found.
+	we do not get the flag to know.
 
 	The current Testify assert package fires Errorf() on every
 	Fail(), which all asserts will fire when an error occurs.  So,
@@ -32,6 +32,9 @@ type mspectTestingT struct {
 	spec *Specification
 }
 
+// Efforf is called by the Testify's assertions to signal a fail condition.
+// This specific method sets an internal mspec flag so that the framework
+// is aware that an error occurred.
 func (m *mspectTestingT) Errorf(format string, args ...interface{}) {
 	// because we control the output of specification, we
 	// need to store these details in a state for later use in
@@ -73,7 +76,7 @@ func (m *mspectTestingT) Errorf(format string, args ...interface{}) {
 	m.spec.PrintError(out)
 }
 
-// NewAssertions constructs a wrapper around Testify's asserts.
+// newAssertions constructs a wrapper around Testify's asserts.
 func newAssertions(s *Specification) *asserts.Assertions {
 	return asserts.New(
 		&mspectTestingT{
