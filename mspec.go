@@ -1,7 +1,7 @@
 package mspec
 
 import (
-	"github.com/eduncan911/gomspec/colors"
+	"github.com/eduncan911/go-mspec/colors"
 	"strings"
 )
 

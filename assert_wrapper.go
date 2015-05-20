@@ -2,7 +2,7 @@ package mspec
 
 import (
 	"fmt"
-	asserts "github.com/eduncan911/gomspec/assert"
+	asserts "github.com/eduncan911/go-mspec/assert"
 	"strings"
 )
 

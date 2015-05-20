@@ -2,7 +2,7 @@ package mspec
 
 import (
 	"fmt"
-	"github.com/eduncan911/gomspec/colors"
+	"github.com/eduncan911/go-mspec/colors"
 	"io/ioutil"
 	"path"
 	"runtime"
