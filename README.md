@@ -2,7 +2,8 @@
 
 `MSpec` is a BDD context/specification testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first, before any code is written using as little syntax noise as possible.  This leaves you free to think of your project and features as a whole without the distraction of writing any code with the added benefit of having tests ready for your project.
 
-[![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec) holds the source documentation (where else?)
+[![GoDoc](https://godoc.org/github.com/eduncan911/go-mspec?status.svg)](https://godoc.org/github.com/eduncan911/go-mspec) holds 
+the source documentation (where else?)
 
 Features
 
@@ -19,7 +20,7 @@ Features
 
 Install it with one line of code:
 
-`go get github.com/eduncan911/gomspec`
+`go get github.com/eduncan911/go-mspec`
 
 There are no external dependencies and it is built against Go's internal packages.  The only dependency is that you have [GOPATH setup normaly](https://golang.org/doc/code.html).
 
@@ -41,7 +42,7 @@ You represent these thoughts in your tests like this:
 package main
 
 import (
-    . "github.com/eduncan911/gomspec"
+    . "github.com/eduncan911/go-mspec"
     "testing"
 )
 
@@ -93,7 +94,7 @@ Print it out and stick it on your office door for everyone to see what you are w
 
 
 
-`GoMSpec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
+`MSpec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
 
 ```
 Feature X
@@ -114,7 +115,7 @@ Pay attention to the function name as it is used as part of the output.
 package dogs
 
 import (
-    . "github.com/eduncan911/gomspec"
+    . "github.com/eduncan911/go-mspec"
     "testing"
 )
 
@@ -152,7 +153,7 @@ func Test_Washing_Dogs(t *testing.T) {
 
 You run the tests using Go's built-in testing framework.  
 
-`GoMSpec` is configured by default to output all stories to the console for easy visibility.
+`MSpec` is configured by default to output all stories to the console for easy visibility.
 
 `$ go test`
 
@@ -180,7 +181,7 @@ Let's add a feature that has a spec that will blow up.
 package main
 
 import (
-    . "github.com/eduncan911/gomspec"
+    . "github.com/eduncan911/go-mspec"
     "testing"
 )
 
@@ -227,8 +228,8 @@ Outputs:
 Be sure to check out more advanced examples in the examples/ folder including how to spec code without writing any implementation details.
 
 ```bash
-~/go/src/github.com/eduncan911/gomspec$ cd examples/
-~/go/src/github.com/eduncan911/gomspec/examples$ go test
+~/go/src/github.com/eduncan911/go-mspec$ cd examples/
+~/go/src/github.com/eduncan911/go-mspec/examples$ go test
 ```
 
 Or just open the files and take a look.  That's the most important part anyways.
@@ -241,7 +242,7 @@ Do note that there is something to be said for simple testing in Go (and simple 
 
 I forked his code and submitted a few bug tweaks at first.  But along the way, I started to have grand visions of my soul mate [Machine.Specifications](https://github.com/machine/machine.specifications) (which is called MSpec for short) for BDD testing.  The ease of defining complete stories right down to the scenarios without having to implement them intrigued me in C#.  It freed me from worrying about implementation details and just focus on the feature I was writing: What did it need to do?  What context was I given to start with? What should it do?
 
-So while using Pranavraja's Zen framework, I kept asking myself: Could I bring those MSpec practices to Go, using a bare-bones framework?  Ok, done.  And since it was so heavily inspired by Aaron's MSpec project, I kept the name going here: `GoMSpec`.
+So while using Pranavraja's Zen framework, I kept asking myself: Could I bring those MSpec practices to Go, using a bare-bones framework?  Ok, done.  And since it was so heavily inspired by Aaron's MSpec project, I kept the name going here: `MSpec`.
 
 While keeping backwards compatibility with his existing Zen framework, I defined several goals for this package:
 
@@ -268,4 +269,5 @@ So with this framework, I came up with:
 * surpressing output (quiet)
 * concurrent channel execution of `it`s
 
-NOTE: If you are looking for the Zen version that remains compatible with Pranavraja's Zen](https://github.com/pranavraja/zen) version, you will want to refer to the [specific tag v0.1](https://github.com/eduncan911/gomspec/tree/v0.1).
+NOTE: If you are looking for the Zen version that remains compatible with Pranavraja's Zen](https://github.com/pranavraja/zen) 
+version, you will want to refer to the [specific tag v0.1](https://github.com/eduncan911/go-mspec/tree/v0.1).
