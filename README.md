@@ -16,15 +16,27 @@ the source documentation (where else?)
 * Uses Testify's rich assertions by default
 * Uses Go's built-in testing.T package (no dependencies)
 
+## API Specification
+
+2016-02-20
+
+The API as of tag v0.4 has been finalized; though, it could change depending on feedback or bug fixes.
+
+There are additional features to add that will only expand the API.  
+
+We do not expect any more breaking changes as of v0.4.
+
 # Go Get It
 
 Install it with one line of code:
 
-`go get github.com/eduncan911/go-mspec`
+`go get -v -u github.com/eduncan911/go-mspec`
 
 There are no external dependencies and it is built against Go's internal packages.  The only dependency is that you have [GOPATH setup normaly](https://golang.org/doc/code.html).
 
-# Go Stub a New Feature
+# Go Use It
+
+## Stubbing a new Feature
 
 Using [Dan North's original BDD definitions](http://dannorth.net/introducing-bdd/), you spec code using the Given/When/Then storyline similar to:
 
@@ -51,13 +63,10 @@ func Test_API_Contract(t *testing.T) {
     Given(t, "a valid Api")
 
     Given(t, "an invalid Api", func(when When) {
-
         when("GetStatus is called", func(it It) {
 
             it("should return an invalid status code")
-
             it("should return an error message")
-
             it("should return an 200 http status code")
 
         })
@@ -67,7 +76,7 @@ func Test_API_Contract(t *testing.T) {
 }
 ```
 
-Note that `Given`, `when` and `it` all have optional variadic parameters.  This allows you to spec things out with as little or as far as you want.  
+Note that `Given`, `when` and `it` all have optional variadic parameters.  This allows you to spec things out as little or as far as you want.  
 
 This compiles and allows you to `go test` it immediately:
 
@@ -83,21 +92,14 @@ This compiles and allows you to `go test` it immediately:
           » It should return an 200 http status code «-- NOT IMPLEMENTED
             
           When GetUsers is called
-
 ```
 
 It is not uncommon to go back and tweak your stories over time as you talk with your domain experts, modifying exactly the scenarios and specifications that should happen.
 
-Print it out and stick it on your office door for everyone to see what you are working on.
 
-
-
-
-# Go Implement a Specification
+## Implement a Specification
 
 Let's write a full specification with real code.
-
-Pay attention to the test's function name `Test_Washing_Dogs` as it is used as part of the output.
 
 ```go
 // dogs_test.go
@@ -139,8 +141,6 @@ func Test_Washing_Dogs(t *testing.T) {
 }
 ```
 
-## Go Test It
-
 Now you can run the tests using Go's built-in testing framework.  
 
 `$ go test`
@@ -162,7 +162,7 @@ Feature: Washing Dogs
 
 The output specifies the feature and then the scenario you are testing.  
 
-There are multiple output settings that can be configured as well with `MSpec`.  It is 
+There are multiple output settings that can be configured. `MSpec` is 
 configured by default to output stdout for easy visibility.  An HTML runner will be 
 included (shortly); or, you can implement your own custom output (e.g. json post to 
 a C.I. build server).
@@ -217,7 +217,15 @@ This outputs:
 
 ![mspec error example](http://i.imgur.com/iuVlElc.png)
 
-# More Examples
+The error message outputs:
+
+* What should have happened.
+* The test file and line number that failed.
+* A snippet of code around that line number.
+
+The default coloring also makes it standout amongst other tests that passed.
+
+## More Examples
 
 Be sure to check out more advanced examples in the examples/ folder including how to spec code without writing any implementation details.
 
@@ -248,8 +256,4 @@ So while using Pranavraja's Zen framework, I kept asking myself: Could I bring t
 * surpressing output (quiet)
 * concurrent channel execution of `it`s
 * custom outputs
-
-# API Contract
-
-While the API is pretty close to complete, there still may be a few breaking changings before the final release.
 
