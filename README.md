@@ -5,16 +5,16 @@
 [![GoDoc](https://godoc.org/github.com/eduncan911/go-mspec?status.svg)](https://godoc.org/github.com/eduncan911/go-mspec) holds 
 the source documentation (where else?)
 
-Features
+## Features
 
 * Uses natural language (Given/When/Then)
-* Stubbing
+* Stubbing (write specs with no code)
 * Human-readable outputs
-* HTML output (coming soon)
-* Use custom Assertions
+* HTML output, e.g. for C.I servers (coming soon...)
+* Override and use your own custom Assertions
 * Configuration options
-* Uses Testify's rich assertions
-* Uses Go's built-in testing.T package
+* Uses Testify's rich assertions by default
+* Uses Go's built-in testing.T package (no dependencies)
 
 # Go Get It
 
@@ -26,7 +26,7 @@ There are no external dependencies and it is built against Go's internal package
 
 # Go Stub a New Feature
 
-Using Dan North's original BDD definitions, you spec code using the Given/When/Then storyline similar to:
+Using [Dan North's original BDD definitions](http://dannorth.net/introducing-bdd/), you spec code using the Given/When/Then storyline similar to:
 
 ```
 Feature X
@@ -93,21 +93,11 @@ Print it out and stick it on your office door for everyone to see what you are w
 
 
 
+# Go Implement a Specification
 
-`MSpec` is a testing package for the Go framework that extends Go's built-in testing package.  It is modeled after the BDD Feature Specification story workflow such as:
+Let's write a full specification with real code.
 
-```
-Feature X
-    Given a context
-    When an event occurs
-    Then it should do something
-```
-
-
-
-### Go Spec It
-
-Pay attention to the function name as it is used as part of the output.
+Pay attention to the test's function name `Test_Washing_Dogs` as it is used as part of the output.
 
 ```go
 // dogs_test.go
@@ -149,17 +139,16 @@ func Test_Washing_Dogs(t *testing.T) {
 }
 ```
 
-### Go Test It
+## Go Test It
 
-You run the tests using Go's built-in testing framework.  
-
-`MSpec` is configured by default to output all stories to the console for easy visibility.
+Now you can run the tests using Go's built-in testing framework.  
 
 `$ go test`
 
-Outputs:
+This outputs:
 
 ```
+$ go test
 Feature: Washing Dogs
 
   Given a dog that has been painted red
@@ -171,9 +160,14 @@ Feature: Washing Dogs
     » It should smell like a clean dog
 ```
 
-The output specifies the feature and then the scenario you are testing.  There are multiple output settings that can be configured as well.
+The output specifies the feature and then the scenario you are testing.  
 
-## Errors are well defined
+There are multiple output settings that can be configured as well with `MSpec`.  It is 
+configured by default to output stdout for easy visibility.  An HTML runner will be 
+included (shortly); or, you can implement your own custom output (e.g. json post to 
+a C.I. build server).
+
+# Errors are well defined
 
 Let's add a feature that has a spec that will blow up.
 
@@ -219,22 +213,22 @@ func Test_Creating_a_Client(t *testing.T) {
 }
 ```
 
-Outputs:
+This outputs:
 
-(insert error pic with color output)
+![mspec error example](http://i.imgur.com/iuVlElc.png)
 
-## Examples
+# More Examples
 
 Be sure to check out more advanced examples in the examples/ folder including how to spec code without writing any implementation details.
 
 ```bash
-~/go/src/github.com/eduncan911/go-mspec$ cd examples/
-~/go/src/github.com/eduncan911/go-mspec/examples$ go test
+$ cd $GOPATH/src/github.com/eduncan911/go-mspec/examples/
+$ go test
 ```
 
 Or just open the files and take a look.  That's the most important part anyways.
 
-## Why another BDD Framework?
+# Why another BDD Framework?
 
 When evaluating several BDD frameworks, [Pranavraja's Zen](https://github.com/pranavraja/zen) package for Go came close - really close; but, it was lacking the more "story" overview I've been accustomed to over the years with [Machine.Specifications](https://github.com/machine/machine.specifications) in C# (.NET land).  
 
@@ -244,30 +238,18 @@ I forked his code and submitted a few bug tweaks at first.  But along the way, I
 
 So while using Pranavraja's Zen framework, I kept asking myself: Could I bring those MSpec practices to Go, using a bare-bones framework?  Ok, done.  And since it was so heavily inspired by Aaron's MSpec project, I kept the name going here: `MSpec`.
 
-While keeping backwards compatibility with his existing Zen framework, I defined several goals for this package:
-
-* Had to stay simple with Give/When/Then definitions.  No complex coding.
-* Keep the low syntax noise from the existing Zen package.
-* I had to be able to write features, scenarios and specs with no implementation details needed.
-
-### No Implementation Details Needed
-
-That last goal above is key and I think is what speaks truly about what BDD is: focus on the story, feature and/or context you are designing - focus on the Behavior!  I tended to design my C# code using Machine.Specifications in this BDD-style by writing entire stories and grand specs up front - designing the system I was building, or the feature I was extending.  In C# land, it's not unheard of me hitting 50 to 100 specs across a single feature and a few different contexts in an hour or two, before writing any code.  Which at that point, I had everything planned out pretty much the way it should behave.  
-
-So with this framework, I came up with:
-
-
-
-
 # Roadmap
 
 * write blog post
 * more examples as well as custom formatters/expectations
-* `Setup()` examples
+* `SetConfig()` examples
 * Total tests passed, errored, skipped
 * HTML output
 * surpressing output (quiet)
 * concurrent channel execution of `it`s
+* custom outputs
 
-NOTE: If you are looking for the Zen version that remains compatible with Pranavraja's Zen](https://github.com/pranavraja/zen) 
-version, you will want to refer to the [specific tag v0.1](https://github.com/eduncan911/go-mspec/tree/v0.1).
+# API Contract
+
+While the API is pretty close to complete, there still may be a few breaking changings before the final release.
+
