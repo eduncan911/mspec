@@ -53,3 +53,15 @@ func (d *dog) Wash() error {
 
 func (d *dog) VisitVet() {
 }
+
+type ProviderConfig struct {
+	Name          string
+	ShellScript   string
+	RunValidation bool
+	RunMatching   bool
+	RunUpserts    bool
+}
+
+func NewClient(pc *ProviderConfig) (ProviderConfig, error) {
+	return ProviderConfig{}, nil
+}
