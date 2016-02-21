@@ -46,6 +46,17 @@ func AssertionsFn(fn func(s *Specification) Assert) {
 	config.assertFn = fn
 }
 
+// SetConfig takes a MSpecConfig instance and will be used for all tests
+// until ResetConfig() is called.
+//
+//    mspec.SetConfig(MSpecConfig{
+//      AnsiOfFeature: "",	// remove color coding for Feature
+//    })
+//
+func SetConfig(c MSpecConfig) {
+	config = &c
+}
+
 // ResetConfig will reset all options back to their default configuration.
 // Useful for custom colors in the middle of a specification.
 func ResetConfig() {
