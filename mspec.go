@@ -1,14 +1,15 @@
 package mspec
 
 import (
-	"github.com/eduncan911/go-mspec/colors"
 	"strings"
+
+	"github.com/eduncan911/go-mspec/colors"
 )
 
-var config *MSpecConfig
+var config *Config
 
-// MSpecConfig defines the configuration used by the package.
-type MSpecConfig struct {
+// Config defines the configuration used by the package.
+type Config struct {
 	AnsiOfFeature            string
 	AnsiOfGiven              string
 	AnsiOfWhen               string
@@ -46,14 +47,14 @@ func AssertionsFn(fn func(s *Specification) Assert) {
 	config.assertFn = fn
 }
 
-// SetConfig takes a MSpecConfig instance and will be used for all tests
+// SetConfig takes a Config instance and will be used for all tests
 // until ResetConfig() is called.
 //
-//    mspec.SetConfig(MSpecConfig{
+//    mspec.SetConfig(Config{
 //      AnsiOfFeature: "",	// remove color coding for Feature
 //    })
 //
-func SetConfig(c MSpecConfig) {
+func SetConfig(c Config) {
 	config = &c
 }
 
@@ -61,7 +62,7 @@ func SetConfig(c MSpecConfig) {
 // Useful for custom colors in the middle of a specification.
 func ResetConfig() {
 	// setup a default configuration
-	config = &MSpecConfig{
+	config = &Config{
 		AnsiOfFeature:            strings.Join([]string{colors.White}, ""),
 		AnsiOfGiven:              strings.Join([]string{colors.Grey}, ""),
 		AnsiOfWhen:               strings.Join([]string{colors.LightGreen}, ""),
@@ -74,7 +75,7 @@ func ResetConfig() {
 	}
 }
 
-func (c *MSpecConfig) resetLasts() {
+func (c *Config) resetLasts() {
 	c.lastGiven = ""
 	c.lastWhen = ""
 	c.lastSpec = ""

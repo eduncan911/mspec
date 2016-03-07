@@ -10,7 +10,7 @@ func Test_MSpec_Instances(t *testing.T) {
 
 		f := "feature value"
 
-		mspecTest := &MSpecConfig{
+		c := &Config{
 			lastFeature: f,
 			lastGiven:   "context value",
 			lastWhen:    "when value",
@@ -19,26 +19,26 @@ func Test_MSpec_Instances(t *testing.T) {
 
 		when("calling reset()", func(it It) {
 
-			mspecTest.resetLasts()
+			c.resetLasts()
 
 			it("should not reset lastFeature as that is used globally", func(assert Assert) {
-				assert.NotEmpty(mspecTest.lastFeature)
+				assert.NotEmpty(c.lastFeature)
 			})
 
 			it("should keep the lastFeature value", func(assert Assert) {
-				assert.Equal(mspecTest.lastFeature, f)
+				assert.Equal(c.lastFeature, f)
 			})
 
 			it("should set lastGiven to zero value", func(assert Assert) {
-				assert.Empty(mspecTest.lastGiven)
+				assert.Empty(c.lastGiven)
 			})
 
 			it("should set lastWhen to zero value", func(assert Assert) {
-				assert.Empty(mspecTest.lastWhen)
+				assert.Empty(c.lastWhen)
 			})
 
 			it("should set lastSpec to zero value", func(assert Assert) {
-				assert.Empty(mspecTest.lastSpec)
+				assert.Empty(c.lastSpec)
 			})
 		})
 	})
