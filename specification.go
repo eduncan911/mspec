@@ -47,7 +47,9 @@ func (spec *Specification) PrintFeature() {
 	if config.lastFeature == spec.Feature {
 		return
 	}
-	fmt.Printf("%sFeature: %s%s\n", config.AnsiOfFeature, spec.Feature, colors.Reset)
+	if config.output != outputNone {
+		fmt.Printf("%sFeature: %s%s\n", config.AnsiOfFeature, spec.Feature, colors.Reset)
+	}
 	config.lastFeature = spec.Feature
 }
 
@@ -55,7 +57,9 @@ func (spec *Specification) PrintContext() {
 	if config.lastGiven == spec.Given {
 		return
 	}
-	fmt.Printf("%s  Given %s%s\n", config.AnsiOfGiven, padLf(spec.Given, 2), colors.Reset)
+	if config.output != outputNone {
+		fmt.Printf("%s  Given %s%s\n", config.AnsiOfGiven, padLf(spec.Given, 2), colors.Reset)
+	}
 	config.lastGiven = spec.Given
 }
 
@@ -63,12 +67,16 @@ func (spec *Specification) PrintWhen() {
 	if config.lastWhen == spec.When {
 		return
 	}
-	fmt.Printf("%s    When %s%s\n", config.AnsiOfWhen, spec.When, colors.Reset)
+	if config.output != outputNone {
+		fmt.Printf("%s    When %s%s\n", config.AnsiOfWhen, spec.When, colors.Reset)
+	}
 	config.lastWhen = spec.When
 }
 
 func (spec *Specification) PrintSpec() {
-	fmt.Printf("%s    » It %s %s\n", config.AnsiOfThen, spec.Spec, colors.Reset)
+	if config.output != outputNone {
+		fmt.Printf("%s    » It %s %s\n", config.AnsiOfThen, spec.Spec, colors.Reset)
+	}
 	config.lastSpec = spec.Spec
 }
 
@@ -76,12 +84,16 @@ func (spec *Specification) PrintSpecWithError() {
 	if config.lastSpec == spec.Spec {
 		return
 	}
-	fmt.Printf("%s    » It %s %s\n", config.AnsiOfThenWithError, spec.Spec, colors.Reset)
+	if config.output != outputNone {
+		fmt.Printf("%s    » It %s %s\n", config.AnsiOfThenWithError, spec.Spec, colors.Reset)
+	}
 	config.lastSpec = spec.Spec
 }
 
 func (spec *Specification) PrintSpecNotImplemented() {
-	fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", config.AnsiOfThenNotImplemented, spec.Spec, colors.Reset)
+	if config.output != outputNone {
+		fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", config.AnsiOfThenNotImplemented, spec.Spec, colors.Reset)
+	}
 	config.lastSpec = spec.Spec
 }
 
@@ -91,16 +103,17 @@ func (spec *Specification) PrintError(message string) {
 	if err != nil {
 		return
 	}
-
-	fmt.Printf("%s%s%s\n", config.AnsiOfExpectedError, message, colors.Reset)
-	fmt.Printf("%s        in %s:%d%s\n", config.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
-	fmt.Printf("%s        ---------\n", config.AnsiOfCode)
-	fmt.Printf("%s        %d. %s%s\n", config.AnsiOfCode, failingLine.number-1, softTabs(failingLine.prev), colors.Reset)
-	fmt.Printf("%s        %d. %s %s\n", config.AnsiOfCodeError, failingLine.number, failingLine.content, colors.Reset)
-	fmt.Printf("%s        %d. %s%s\n", config.AnsiOfCode, failingLine.number+1, softTabs(failingLine.next), colors.Reset)
-	fmt.Println()
-	spec.T.Fail()
-	fmt.Println()
+	if config.output != outputNone {
+		fmt.Printf("%s%s%s\n", config.AnsiOfExpectedError, message, colors.Reset)
+		fmt.Printf("%s        in %s:%d%s\n", config.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
+		fmt.Printf("%s        ---------\n", config.AnsiOfCode)
+		fmt.Printf("%s        %d. %s%s\n", config.AnsiOfCode, failingLine.number-1, softTabs(failingLine.prev), colors.Reset)
+		fmt.Printf("%s        %d. %s %s\n", config.AnsiOfCodeError, failingLine.number, failingLine.content, colors.Reset)
+		fmt.Printf("%s        %d. %s%s\n", config.AnsiOfCode, failingLine.number+1, softTabs(failingLine.next), colors.Reset)
+		fmt.Println()
+		spec.T.Fail()
+		fmt.Println()
+	}
 }
 
 func getFailingLine() (failingLine, error) {
@@ -133,7 +146,7 @@ func getFailingLine() (failingLine, error) {
 		content:  softTabs(lines[1]),
 		next:     softTabs(lines[2]),
 		filename: filename,
-		number:   int(ln),
+		number:   ln,
 	}, nil
 
 }

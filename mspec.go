@@ -6,10 +6,12 @@ import (
 	"github.com/eduncan911/go-mspec/colors"
 )
 
-var config *Config
+var config *MSpecConfig
 
-// Config defines the configuration used by the package.
-type Config struct {
+// MSpecConfig defines the configuration used by the package.
+type MSpecConfig struct {
+	output outputType
+
 	AnsiOfFeature            string
 	AnsiOfGiven              string
 	AnsiOfWhen               string
@@ -30,6 +32,9 @@ type Config struct {
 
 func init() {
 	ResetConfig()
+
+	// set to verbose output by default
+	SetVerbose()
 
 	// register the default Assertions package
 	AssertionsFn(func(s *Specification) Assert {
@@ -54,7 +59,7 @@ func AssertionsFn(fn func(s *Specification) Assert) {
 //      AnsiOfFeature: "",	// remove color coding for Feature
 //    })
 //
-func SetConfig(c Config) {
+func SetConfig(c MSpecConfig) {
 	config = &c
 }
 
@@ -62,7 +67,7 @@ func SetConfig(c Config) {
 // Useful for custom colors in the middle of a specification.
 func ResetConfig() {
 	// setup a default configuration
-	config = &Config{
+	config = &MSpecConfig{
 		AnsiOfFeature:            strings.Join([]string{colors.White}, ""),
 		AnsiOfGiven:              strings.Join([]string{colors.Grey}, ""),
 		AnsiOfWhen:               strings.Join([]string{colors.LightGreen}, ""),
@@ -75,7 +80,30 @@ func ResetConfig() {
 	}
 }
 
-func (c *Config) resetLasts() {
+// SetVerbose is used to set the output to Stdout (default).
+// Do not use this at this time.  The package API
+// will most likely change.
+func SetVerbose() {
+	config.output = outputStdout
+}
+
+// SetSilent is used to make all output silent.
+// Do not use this at this time.  The package API
+// will most likely change.
+func SetSilent() {
+	config.output = outputNone
+}
+
+type outputType int
+
+const (
+	outputNone outputType = 1 << iota
+	outputStdout
+	outputStderr
+	outputHTML
+)
+
+func (c *MSpecConfig) resetLasts() {
 	c.lastGiven = ""
 	c.lastWhen = ""
 	c.lastSpec = ""

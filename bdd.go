@@ -67,7 +67,9 @@ func Given(t *testing.T, given string, when ...func(When)) {
 	// reset to default
 	config.resetLasts()
 
-	fmt.Println()
+	if config.output != outputNone {
+		fmt.Println()
+	}
 }
 
 // When defines the action or event when Given a specific context.
