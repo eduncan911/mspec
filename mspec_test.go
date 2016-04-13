@@ -1,6 +1,7 @@
 package mspec
 
 import (
+	"math"
 	"testing"
 )
 
@@ -46,7 +47,7 @@ func Test_MSpec_Instances(t *testing.T) {
 	})
 }
 
-func BenchmarkEmptyGiven(b *testing.B) {
+func BenchmarkGivenStub(b *testing.B) {
 	SetSilent()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -55,7 +56,7 @@ func BenchmarkEmptyGiven(b *testing.B) {
 	}
 }
 
-func BenchmarkEmptyWhen(b *testing.B) {
+func BenchmarkWhenStub(b *testing.B) {
 	SetSilent()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -66,7 +67,7 @@ func BenchmarkEmptyWhen(b *testing.B) {
 	}
 }
 
-func BenchmarkEmptyThen(b *testing.B) {
+func BenchmarkThenStub(b *testing.B) {
 	SetSilent()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -78,6 +79,22 @@ func BenchmarkEmptyThen(b *testing.B) {
 		})
 	}
 }
+
+func BenchmarkError(b *testing.B) {
+	SetSilent()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		t := &testing.T{}
+		Given(t, "a context to fail", func(when When) {
+			when("prepping to call the thing to fail", func(it It) {
+				it("should fail", func(assert Assert) {
+					assert.True(false)
+				})
+			})
+		})
+	}
+}
+
 func BenchmarkSimpleMspec(b *testing.B) {
 	SetSilent()
 	b.ResetTimer()
@@ -119,14 +136,14 @@ func BenchmarkComplexMspec(b *testing.B) {
 		Given(t, "a struct we create often", func(when When) {
 
 			x := struct {
-				Value  string
-				BigInt int64
+				Value string
+				Log   float64
 			}{}
 
 			when("we do something more complex", func(it It) {
 
 				x.Value = "a string to be set"
-				x.BigInt = (55 / 11) + 522032223223523423
+				x.Log = math.Log(20)
 				ii := int8(10)
 
 				it("should have x.Value be what we expect", func(assert Assert) {
@@ -135,14 +152,38 @@ func BenchmarkComplexMspec(b *testing.B) {
 					}
 				})
 
-				it("should have x.BigInit be what we expect", func(assert Assert) {
-					if !assert.Equal(522032223223523428, x.BigInt) {
+				it("should have x.Log be what we expect", func(assert Assert) {
+					if !assert.Equal(2.995732273553991, x.Log) {
 						b.Fail()
 					}
 				})
 
 				it("should be true", func(assert Assert) {
 					if !assert.Equal(10, int(ii)) {
+						b.Fail()
+					}
+				})
+			})
+
+			when("we do something else", func(it It) {
+
+				x.Value = "another string to be set"
+				x.Log = math.Log(15)
+
+				it("should have x.Value be what we expect", func(assert Assert) {
+					if !assert.Equal("another string to be set", x.Value) {
+						b.Fail()
+					}
+				})
+
+				it("should have x.Log be what we expect", func(assert Assert) {
+					if !assert.Equal(2.70805020110221, x.Log) {
+						b.Fail()
+					}
+				})
+
+				it("should be true", func(assert Assert) {
+					if !assert.Equal(math.Log2E, 1/math.Ln2) {
 						b.Fail()
 					}
 				})
@@ -160,23 +201,38 @@ func BenchmarkComplexTest(b *testing.B) {
 			b.Fail()
 		}
 		x := struct {
-			Value  string
-			BigInt int64
+			Value string
+			Log   float64
 		}{}
 
 		x.Value = "a string to be set"
-		x.BigInt = (55 / 11) + 522032223223523423
+		x.Log = math.Log(20)
 		ii := int8(10)
 
 		if x.Value != "a string to be set" {
 			b.Fail()
 		}
 
-		if x.BigInt != 522032223223523428 {
+		if x.Log != 2.995732273553991 {
 			b.Fail()
 		}
 
 		if 10 != int(ii) {
+			b.Fail()
+		}
+
+		x.Value = "another string to be set"
+		x.Log = math.Log(15)
+
+		if x.Value != "another string to be set" {
+			b.Fail()
+		}
+
+		if x.Log != 2.70805020110221 {
+			b.Fail()
+		}
+
+		if math.Log2E != 1/math.Ln2 {
 			b.Fail()
 		}
 	}
