@@ -1,6 +1,6 @@
 /*Package mspec is a BDD context/specification testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first, before any code is written using as little syntax noise as possible.  This leaves you free to think of your project and features as a whole without the distraction of writing any code with the added benefit of having tests ready for your project.
 
-[![GoDoc](https://godoc.org/github.com/eduncan911/gomspec?status.svg)](https://godoc.org/github.com/eduncan911/gomspec) holds the source documentation (where else?)
+[![GoDoc](https://godoc.org/github.com/eduncan911/mspec?status.svg)](https://godoc.org/github.com/eduncan911/mspec) holds the source documentation (where else?)
 
 Features
 

@@ -2,7 +2,7 @@
 
 `MSpec` is a BDD context/specification testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first, before any code is written using as little syntax noise as possible.  This leaves you free to think of your project and features as a whole without the distraction of writing any code with the added benefit of having tests ready for your project.
 
-[![GoDoc](https://godoc.org/github.com/eduncan911/go-mspec?status.svg)](https://godoc.org/github.com/eduncan911/go-mspec) [![Build Status](https://travis-ci.org/eduncan911/go-mspec.svg?branch=master)](https://travis-ci.org/eduncan911/go-mspec) [![Go Report Card](https://goreportcard.com/badge/github.com/eduncan911/go-mspec)](https://goreportcard.com/report/github.com/eduncan911/go-mspec)
+[![GoDoc](https://godoc.org/github.com/eduncan911/mspec?status.svg)](https://godoc.org/github.com/eduncan911/mspec) [![Build Status](https://travis-ci.org/eduncan911/mspec.svg?branch=master)](https://travis-ci.org/eduncan911/mspec) [![Go Report Card](https://goreportcard.com/badge/github.com/eduncan911/mspec)](https://goreportcard.com/report/github.com/eduncan911/mspec)
 
 ## Features
 
@@ -83,13 +83,13 @@ This compiles and allows you to `go test` it immediately:
     $ go test
       Feature: API Contract
         Given a valid Api
-         
+
         Given an invalid Api
           When GetStatus is called
           » It should return an invalid status code «-- NOT IMPLEMENTED
           » It should return an error message «-- NOT IMPLEMENTED
           » It should return an 200 http status code «-- NOT IMPLEMENTED
-            
+
           When GetUsers is called
 ```
 
@@ -161,9 +161,9 @@ Feature: Washing Dogs
 
 The output specifies the feature and then the scenario you are testing.  
 
-There are multiple output settings that can be configured. `MSpec` is 
-configured by default to output stdout for easy visibility.  An HTML runner will be 
-included (shortly); or, you can implement your own custom output (e.g. json post to 
+There are multiple output settings that can be configured. `MSpec` is
+configured by default to output stdout for easy visibility.  An HTML runner will be
+included (shortly); or, you can implement your own custom output (e.g. json post to
 a C.I. build server).
 
 # Errors are well defined
@@ -255,4 +255,3 @@ So while using Pranavraja's Zen framework, I kept asking myself: Could I bring t
 * surpressing output (quiet)
 * concurrent channel execution of `it`s
 * custom outputs
-
