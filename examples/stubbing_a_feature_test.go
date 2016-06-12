@@ -7,7 +7,7 @@ import (
 
 func Test_Specing_A_New_Feature(t *testing.T) {
 
-	// MSpec was designed to let you capture your free formed throughts
+	// MSpec was designed to let you capture your free formed thoughts
 	// as you dream up the next big idea.  forget all about coding, how
 	// you are going to implement it, etc: just think on how you will
 	// design the feature.

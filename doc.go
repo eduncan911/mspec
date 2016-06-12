@@ -202,7 +202,7 @@ Nice eh?
 Testing
 
 There is nothing like using a testing package to test itself.  There is
-some nice rich information avaliable.
+some nice rich information available.
 
   go test
 
