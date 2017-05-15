@@ -57,7 +57,7 @@ func Given(t *testing.T, given string, when ...func(When)) {
 					}
 
 					// run() handles contextual printing and some delegation
-					// to the Assert's implemention for error handling
+					// to the Assert's implementation for error handling
 					spec.run()
 				})
 			}
