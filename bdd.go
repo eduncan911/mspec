@@ -7,14 +7,16 @@ import (
 	"testing"
 )
 
-func (spec *Specification) run() {
+// Run handles contextual printing and some delegation
+// to the Assert's implementation for error handling
+func (spec *Specification) Run() {
 
 	// execute the Assertion
 	spec.AssertFn(config.assertFn(spec))
 
 	// if there was no error (which handles its own printing),
 	// print the spec here.
-	if spec.notImplemented {
+	if spec.NotImplemented {
 		spec.PrintSpecNotImplemented()
 	} else if !spec.AssertionFailed {
 		spec.PrintSpec()
@@ -27,7 +29,7 @@ func Given(t *testing.T, given string, when ...func(When)) {
 	// setup the spec that we will be using
 	spec := &Specification{
 		T:       t,
-		Feature: featureDesc(2),
+		Feature: FeatureDesc(2),
 		Given:   given,
 	}
 	spec.PrintFeature()
@@ -49,25 +51,23 @@ func Given(t *testing.T, given string, when ...func(When)) {
 						// having at least 1 assert means we are implemented
 						for _, assertFn := range assertFns {
 							spec.AssertFn = assertFn
-							spec.notImplemented = false
+							spec.NotImplemented = false
 						}
 					} else {
-						spec.AssertFn = notImplemented()
-						spec.notImplemented = true
+						spec.AssertFn = NotImplemented()
+						spec.NotImplemented = true
 					}
 
-					// run() handles contextual printing and some delegation
-					// to the Assert's implementation for error handling
-					spec.run()
+					spec.Run()
 				})
 			}
 		})
 	}
 
 	// reset to default
-	config.resetLasts()
+	config.ResetLasts()
 
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Println()
 	}
 }
@@ -89,14 +89,15 @@ func Setup(before, after func()) func(fn func(Assert)) func(Assert) {
 	}
 }
 
-// notImplemented is used to mark a specification that needs coding out.
-var notImplemented = func() func(Assert) {
+// NotImplemented is used to mark a specification that needs coding out.
+func NotImplemented() func(Assert) {
 	return func(assert Assert) {
 		// nothing to do here
 	}
 }
 
-var featureDesc = func(callerDepth int) string {
+// FeatureDesc parse feature name from the test itself.
+func FeatureDesc(callerDepth int) string {
 	pc, _, _, _ := runtime.Caller(callerDepth)
 	m := fmt.Sprintf("%s", runtime.FuncForPC(pc).Name())
 	i := strings.LastIndex(m, ".")
