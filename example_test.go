@@ -1,33 +1,33 @@
 package mspec
 
-import (
+import "github.com/eduncan911/mspec/bdd"
+
 //"testing"
-)
 
 // func Example_BDD_Specifications(t *testing.T) {
 
 // 	Given(t, "a unique scenerio", func(when When) {
 
 // 		when("an event occurs", func(it It) {
-// 			it("should evaluate 1s are equal", func(assert Assert) {
+// 			it("should evaluate 1s are equal", func(assert bdd.Assert) {
 // 				assert.Equal(1, 1)
 // 			})
 
-// 			it("should also evaluate 3 and 4 are not equal", func(assert Assert) {
+// 			it("should also evaluate 3 and 4 are not equal", func(assert bdd.Assert) {
 // 				assert.NotEqual(3, 4)
 // 			})
 
 // 			it("should not have this implemented")
 
-// 			it("should perform another evaluation", func(assert Assert) {
+// 			it("should perform another evaluation", func(assert bdd.Assert) {
 // 				assert.Contains("shoppy", "opp")
 // 			})
 
-// 			it("should error here", func(assert Assert) {
+// 			it("should error here", func(assert bdd.Assert) {
 // 				assert.True(false)
 // 			})
 
-// 			it("should also perform another evaluation", func(assert Assert) {
+// 			it("should also perform another evaluation", func(assert bdd.Assert) {
 // 				assert.NotEqual("hello", "world")
 // 			})
 // 		})
@@ -49,11 +49,11 @@ import (
 
 // 			setup := Setup(before, after)
 
-// 			it("should increment count to 1", setup(func(assert Assert) {
+// 			it("should increment count to 1", setup(func(assert bdd.Assert) {
 // 				assert.Equal(1, count)
 // 			}))
 
-// 			it("should decrement comment during teardown back to 0", func(assert Assert) {
+// 			it("should decrement comment during teardown back to 0", func(assert bdd.Assert) {
 // 				assert.Equal(0, count)
 // 			})
 // 		})
@@ -63,17 +63,19 @@ import (
 
 func Example() {
 
+	given, _, _ := bdd.Sentences()
+
 	//var t *testing.T
 	// you can quickly spec new features with little syntax noise
 	//
 
 	// GIVEN a valid Api, what shall we do?  not sure yet.
 	//
-	Given(nil, "a valid Api")
+	given(nil, "a valid Api")
 
 	// GIVEN an invalid Api...
 	//
-	Given(nil, "an invalid Api", func(when When) {
+	given(nil, "an invalid Api", func(when bdd.When) {
 
 		// ...WHEN GetUsers is called, we don't know what SHOULD happen yet.
 		//
@@ -81,7 +83,7 @@ func Example() {
 
 		// ...WHEN GetStatus is called...
 		//
-		when("GetStatus is called", func(it It) {
+		when("GetStatus is called", func(it bdd.It) {
 
 			// ...IT SHOULD return an invalid status code
 			it("should return an invalid status code")
