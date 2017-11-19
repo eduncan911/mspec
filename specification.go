@@ -2,12 +2,13 @@ package mspec
 
 import (
 	"fmt"
-	"github.com/eduncan911/go-mspec/colors"
 	"io/ioutil"
 	"path"
 	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/eduncan911/go-mspec/colors"
 )
 
 type formatter interface {
@@ -40,61 +41,61 @@ type Specification struct {
 	AssertionFailed         bool
 	AssertionFailedMessages []string
 
-	notImplemented bool
+	NotImplemented bool
 }
 
 func (spec *Specification) PrintFeature() {
-	if config.lastFeature == spec.Feature {
+	if config.LastFeature == spec.Feature {
 		return
 	}
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Printf("%sFeature: %s%s\n", config.AnsiOfFeature, spec.Feature, colors.Reset)
 	}
-	config.lastFeature = spec.Feature
+	config.LastFeature = spec.Feature
 }
 
 func (spec *Specification) PrintContext() {
-	if config.lastGiven == spec.Given {
+	if config.LastGiven == spec.Given {
 		return
 	}
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Printf("%s  Given %s%s\n", config.AnsiOfGiven, padLf(spec.Given, 2), colors.Reset)
 	}
-	config.lastGiven = spec.Given
+	config.LastGiven = spec.Given
 }
 
 func (spec *Specification) PrintWhen() {
-	if config.lastWhen == spec.When {
+	if config.LastWhen == spec.When {
 		return
 	}
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Printf("%s    When %s%s\n", config.AnsiOfWhen, spec.When, colors.Reset)
 	}
-	config.lastWhen = spec.When
+	config.LastWhen = spec.When
 }
 
 func (spec *Specification) PrintSpec() {
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Printf("%s    » It %s %s\n", config.AnsiOfThen, spec.Spec, colors.Reset)
 	}
-	config.lastSpec = spec.Spec
+	config.LastSpec = spec.Spec
 }
 
 func (spec *Specification) PrintSpecWithError() {
-	if config.lastSpec == spec.Spec {
+	if config.LastSpec == spec.Spec {
 		return
 	}
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Printf("%s    » It %s %s\n", config.AnsiOfThenWithError, spec.Spec, colors.Reset)
 	}
-	config.lastSpec = spec.Spec
+	config.LastSpec = spec.Spec
 }
 
 func (spec *Specification) PrintSpecNotImplemented() {
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", config.AnsiOfThenNotImplemented, spec.Spec, colors.Reset)
 	}
-	config.lastSpec = spec.Spec
+	config.LastSpec = spec.Spec
 }
 
 func (spec *Specification) PrintError(message string) {
@@ -103,7 +104,7 @@ func (spec *Specification) PrintError(message string) {
 	if err != nil {
 		return
 	}
-	if config.output != outputNone {
+	if config.Output != OutputNone {
 		fmt.Printf("%s%s%s\n", config.AnsiOfExpectedError, message, colors.Reset)
 		fmt.Printf("%s        in %s:%d%s\n", config.AnsiOfCode, path.Base(failingLine.filename), failingLine.number, colors.Reset)
 		fmt.Printf("%s        ---------\n", config.AnsiOfCode)
@@ -113,6 +114,22 @@ func (spec *Specification) PrintError(message string) {
 		fmt.Println()
 		spec.T.Fail()
 		fmt.Println()
+	}
+}
+
+// Run handles contextual printing and some delegation
+// to the Assert's implementation for error handling
+func (spec *Specification) Run() {
+
+	// execute the Assertion
+	spec.AssertFn(config.assertFn(spec))
+
+	// if there was no error (which handles its own printing),
+	// print the spec here.
+	if spec.NotImplemented {
+		spec.PrintSpecNotImplemented()
+	} else if !spec.AssertionFailed {
+		spec.PrintSpec()
 	}
 }
 
