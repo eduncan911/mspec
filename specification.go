@@ -2,12 +2,13 @@ package mspec
 
 import (
 	"fmt"
-	"github.com/eduncan911/go-mspec/colors"
 	"io/ioutil"
 	"path"
 	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/eduncan911/go-mspec/colors"
 )
 
 type formatter interface {
@@ -40,7 +41,7 @@ type Specification struct {
 	AssertionFailed         bool
 	AssertionFailedMessages []string
 
-	notImplemented bool
+	NotImplemented bool
 }
 
 func (spec *Specification) PrintFeature() {
@@ -113,6 +114,22 @@ func (spec *Specification) PrintError(message string) {
 		fmt.Println()
 		spec.T.Fail()
 		fmt.Println()
+	}
+}
+
+// Run handles contextual printing and some delegation
+// to the Assert's implementation for error handling
+func (spec *Specification) Run() {
+
+	// execute the Assertion
+	spec.AssertFn(config.assertFn(spec))
+
+	// if there was no error (which handles its own printing),
+	// print the spec here.
+	if spec.NotImplemented {
+		spec.PrintSpecNotImplemented()
+	} else if !spec.AssertionFailed {
+		spec.PrintSpec()
 	}
 }
 
