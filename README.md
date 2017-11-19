@@ -2,13 +2,7 @@
 
 `MSpec` is a BDD context/specification testing package for Go(Lang) with a strong emphases on spec'ing your feature(s) and scenarios first, before any code is written using as little syntax noise as possible.  This leaves you free to think of your project and features as a whole without the distraction of writing any code with the added benefit of having tests ready for your project.
 
-[![GoDoc](https://godoc.org/github.com/ddspog/mspec?status.svg)](https://godoc.org/github.com/ddspog/mspec) [![Go Report Card](https://goreportcard.com/badge/github.com/ddspog/mspec)](https://goreportcard.com/report/github.com/ddspog/mspec)
-
-## Fork Information
-
-This fork was made for the sole purpose of publishing some names. I was interested on making some tweaks on this package, by changing only the bdd.go file. But for my changes to run on another package, I've needed some names, functions and variables public.
-
-All credits to the original author of this package [eduncan911](https://github.com/eduncan911). This fork will be deleted, if the same changes apply to original package, or if requested by author.
+[![GoDoc](https://godoc.org/github.com/eduncan911/mspec?status.svg)](https://godoc.org/github.com/eduncan911/mspec) [![Build Status](https://travis-ci.org/eduncan911/mspec.svg?branch=master)](https://travis-ci.org/eduncan911/mspec) [![Go Report Card](https://goreportcard.com/badge/github.com/eduncan911/mspec)](https://goreportcard.com/report/github.com/eduncan911/mspec)
 
 ## Features
 
