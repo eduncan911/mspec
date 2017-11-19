@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ddspog/mspec"
+	"github.com/eduncan911/mspec"
 )
 
 // Given defines the Feature's specific context to be spec'd out.
