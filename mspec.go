@@ -28,10 +28,10 @@ type MSpecConfig struct {
 
 	assertFn func(*Specification) Assert
 
-	lastFeature string
-	lastGiven   string
-	lastWhen    string
-	lastSpec    string
+	LastFeature string
+	LastGiven   string
+	LastWhen    string
+	LastSpec    string
 }
 
 func init() {
@@ -108,7 +108,7 @@ const (
 )
 
 func (c *MSpecConfig) ResetLasts() {
-	c.lastGiven = ""
-	c.lastWhen = ""
-	c.lastSpec = ""
+	c.LastGiven = ""
+	c.LastWhen = ""
+	c.LastSpec = ""
 }

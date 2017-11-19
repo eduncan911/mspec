@@ -1,26 +1,27 @@
-package mspec
+package test
 
 import (
 	"math"
 	"testing"
 
+	"github.com/eduncan911/mspec"
 	"github.com/eduncan911/mspec/bdd"
 )
 
 func Test_MSpec_Instances(t *testing.T) {
 	given, _, _ := bdd.Sentences()
 
-	SetSilent()
+	mspec.SetSilent()
 
 	given(t, "an mspec instance", func(when bdd.When) {
 
 		f := "feature value"
 
-		c := &MSpecConfig{
-			lastFeature: f,
-			lastGiven:   "context value",
-			lastWhen:    "when value",
-			lastSpec:    "title value",
+		c := &mspec.MSpecConfig{
+			LastFeature: f,
+			LastGiven:   "context value",
+			LastWhen:    "when value",
+			LastSpec:    "title value",
 		}
 
 		when("calling reset()", func(it bdd.It) {
@@ -28,30 +29,30 @@ func Test_MSpec_Instances(t *testing.T) {
 			c.ResetLasts()
 
 			it("should not reset lastFeature as that is used globally", func(assert bdd.Assert) {
-				assert.NotEmpty(c.lastFeature)
+				assert.NotEmpty(c.LastFeature)
 			})
 
 			it("should keep the lastFeature value", func(assert bdd.Assert) {
-				assert.Equal(c.lastFeature, f)
+				assert.Equal(c.LastFeature, f)
 			})
 
 			it("should set lastGiven to zero value", func(assert bdd.Assert) {
-				assert.Empty(c.lastGiven)
+				assert.Empty(c.LastGiven)
 			})
 
 			it("should set lastWhen to zero value", func(assert bdd.Assert) {
-				assert.Empty(c.lastWhen)
+				assert.Empty(c.LastWhen)
 			})
 
 			it("should set lastSpec to zero value", func(assert bdd.Assert) {
-				assert.Empty(c.lastSpec)
+				assert.Empty(c.LastSpec)
 			})
 		})
 	})
 }
 
 func BenchmarkGivenStub(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 
 	given, _, _ := bdd.Sentences()
@@ -63,7 +64,7 @@ func BenchmarkGivenStub(b *testing.B) {
 }
 
 func BenchmarkWhenStub(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 
 	given, _, _ := bdd.Sentences()
@@ -77,7 +78,7 @@ func BenchmarkWhenStub(b *testing.B) {
 }
 
 func BenchmarkThenStub(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 
 	given, _, _ := bdd.Sentences()
@@ -93,7 +94,7 @@ func BenchmarkThenStub(b *testing.B) {
 }
 
 func BenchmarkError(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 
 	given, _, _ := bdd.Sentences()
@@ -111,7 +112,7 @@ func BenchmarkError(b *testing.B) {
 }
 
 func BenchmarkSimpleMspec(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 
 	given, _, _ := bdd.Sentences()
@@ -132,7 +133,7 @@ func BenchmarkSimpleMspec(b *testing.B) {
 }
 
 func BenchmarkSimpleTest(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		t := &testing.T{} // get accurate GC numbers
@@ -147,7 +148,7 @@ func BenchmarkSimpleTest(b *testing.B) {
 }
 
 func BenchmarkComplexMspec(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 
 	given, _, _ := bdd.Sentences()
@@ -214,7 +215,7 @@ func BenchmarkComplexMspec(b *testing.B) {
 }
 
 func BenchmarkComplexTest(b *testing.B) {
-	SetSilent()
+	mspec.SetSilent()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		t := &testing.T{} // get accurate GC numbers

@@ -45,57 +45,57 @@ type Specification struct {
 }
 
 func (spec *Specification) PrintFeature() {
-	if config.lastFeature == spec.Feature {
+	if config.LastFeature == spec.Feature {
 		return
 	}
 	if config.Output != OutputNone {
 		fmt.Printf("%sFeature: %s%s\n", config.AnsiOfFeature, spec.Feature, colors.Reset)
 	}
-	config.lastFeature = spec.Feature
+	config.LastFeature = spec.Feature
 }
 
 func (spec *Specification) PrintContext() {
-	if config.lastGiven == spec.Given {
+	if config.LastGiven == spec.Given {
 		return
 	}
 	if config.Output != OutputNone {
 		fmt.Printf("%s  Given %s%s\n", config.AnsiOfGiven, padLf(spec.Given, 2), colors.Reset)
 	}
-	config.lastGiven = spec.Given
+	config.LastGiven = spec.Given
 }
 
 func (spec *Specification) PrintWhen() {
-	if config.lastWhen == spec.When {
+	if config.LastWhen == spec.When {
 		return
 	}
 	if config.Output != OutputNone {
 		fmt.Printf("%s    When %s%s\n", config.AnsiOfWhen, spec.When, colors.Reset)
 	}
-	config.lastWhen = spec.When
+	config.LastWhen = spec.When
 }
 
 func (spec *Specification) PrintSpec() {
 	if config.Output != OutputNone {
 		fmt.Printf("%s    » It %s %s\n", config.AnsiOfThen, spec.Spec, colors.Reset)
 	}
-	config.lastSpec = spec.Spec
+	config.LastSpec = spec.Spec
 }
 
 func (spec *Specification) PrintSpecWithError() {
-	if config.lastSpec == spec.Spec {
+	if config.LastSpec == spec.Spec {
 		return
 	}
 	if config.Output != OutputNone {
 		fmt.Printf("%s    » It %s %s\n", config.AnsiOfThenWithError, spec.Spec, colors.Reset)
 	}
-	config.lastSpec = spec.Spec
+	config.LastSpec = spec.Spec
 }
 
 func (spec *Specification) PrintSpecNotImplemented() {
 	if config.Output != OutputNone {
 		fmt.Printf("%s    » It %s «-- NOT IMPLEMENTED%s\n", config.AnsiOfThenNotImplemented, spec.Spec, colors.Reset)
 	}
-	config.lastSpec = spec.Spec
+	config.LastSpec = spec.Spec
 }
 
 func (spec *Specification) PrintError(message string) {

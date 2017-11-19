@@ -1,4 +1,4 @@
-package mspec
+package test
 
 import "github.com/eduncan911/mspec/bdd"
 
