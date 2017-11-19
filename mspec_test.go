@@ -22,7 +22,7 @@ func Test_MSpec_Instances(t *testing.T) {
 
 		when("calling reset()", func(it It) {
 
-			c.ResetLasts()
+			c.resetLasts()
 
 			it("should not reset lastFeature as that is used globally", func(assert Assert) {
 				assert.NotEmpty(c.lastFeature)
