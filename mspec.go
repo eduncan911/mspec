@@ -10,7 +10,7 @@ var config *MSpecConfig
 
 // MSpecConfig defines the configuration used by the package.
 type MSpecConfig struct {
-	Output outputType
+	output outputType
 
 	AnsiOfFeature            string
 	AnsiOfGiven              string
@@ -63,13 +63,6 @@ func SetConfig(c MSpecConfig) {
 	config = &c
 }
 
-// Config receive the current config instance, used to acess some
-// configuration options.
-func Config() (c *MSpecConfig) {
-	c = config
-	return
-}
-
 // ResetConfig will reset all options back to their default configuration.
 // Useful for custom colors in the middle of a specification.
 func ResetConfig() {
@@ -91,31 +84,26 @@ func ResetConfig() {
 // Do not use this at this time.  The package API
 // will most likely change.
 func SetVerbose() {
-	config.Output = OutputStdout
+	config.output = outputStdout
 }
 
 // SetSilent is used to make all output silent.
 // Do not use this at this time.  The package API
 // will most likely change.
 func SetSilent() {
-	config.Output = OutputNone
+	config.output = outputNone
 }
 
 type outputType int
 
 const (
-	// OutputNone stands for no output target.
-	OutputNone outputType = 1 << iota
-	// OutputStdout stands for a stdout output target.
-	OutputStdout
-	// OutputStderr stands for a stderr output target.
-	OutputStderr
-	// OutputHTML stands for a stderr output target.
-	OutputHTML
+	outputNone outputType = 1 << iota
+	outputStdout
+	outputStderr
+	outputHTML
 )
 
-// ResetLasts reset some values on configuration.
-func (c *MSpecConfig) ResetLasts() {
+func (c *MSpecConfig) resetLasts() {
 	c.lastGiven = ""
 	c.lastWhen = ""
 	c.lastSpec = ""
